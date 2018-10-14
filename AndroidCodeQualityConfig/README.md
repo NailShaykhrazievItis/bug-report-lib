@@ -12,7 +12,7 @@ Code quality config for android project, including lint, pmd, findbugs, checksty
 +  [PMD](https://github.com/pmd/pmd)
 
 ## Detect
-+ [Detect] (https://github.com/arturbosch/detekt)
++ [Detect](https://github.com/arturbosch/detekt)
 
 ## Lint
 
