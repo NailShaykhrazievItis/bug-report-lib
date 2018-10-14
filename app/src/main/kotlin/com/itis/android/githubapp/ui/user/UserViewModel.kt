@@ -7,5 +7,5 @@ import androidx.lifecycle.ViewModel
  */
 class UserViewModel : ViewModel() {
 
-    private val temp = 5
+    private val temp = "TEMP"
 }

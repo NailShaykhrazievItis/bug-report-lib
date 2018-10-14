@@ -87,7 +87,7 @@ complexity:
     active: true
     threshold: 40
   StringLiteralDuplication:
-    active: true
+    active: false
     threshold: 2
     ignoreAnnotation: true
     excludeStringsWithLessThan5Characters: true
@@ -217,9 +217,9 @@ potential-bugs:
   ExplicitGarbageCollectionCall:
     active: true
   LateinitUsage:
-    active: true
+    active: false
     excludeAnnotatedProperties: "InjectPresenter, InjectExtra"
-    ignoreOnClassesPattern: "kodein.kt"
+    ignoreOnClassesPattern: ""
   UnconditionalJumpStatementInLoop:
     active: true
   UnreachableCode:

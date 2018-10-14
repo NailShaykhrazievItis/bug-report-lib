@@ -7,5 +7,5 @@ import com.itis.android.githubapp.api.service.RepoService
  */
 class RepoRepository(val repoApi: RepoService) {
 
-    private val temp = 5
+    private val temp = "TEMP"
 }
