@@ -7,7 +7,7 @@ import java.io.IOException
 /**
  * Created by Nail Shaykhraziev on 08.10.2018.
  */
-class HeaderInterceptor() : Interceptor {
+class HeaderInterceptor : Interceptor {
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {

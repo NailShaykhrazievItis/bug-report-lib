@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 /**
  * Created by Nail Shaykhraziev on 10.10.2018.
  */
-class UserViewModel() : ViewModel() {
+class UserViewModel : ViewModel() {
 
+    private val temp = "TEMP"
 }

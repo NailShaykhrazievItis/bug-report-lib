@@ -3,7 +3,6 @@ package com.itis.android.githubapp.api.service
 import com.itis.android.githubapp.model.Repository
 import io.reactivex.Single
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.Path
 import retrofit2.http.Query
 

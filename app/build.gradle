@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply from: '../AndroidCodeQualityConfig/quality.gradle'
 
 android {
     compileSdkVersion 28
@@ -104,5 +105,11 @@ dependencies {
 kotlin {
     experimental {
         coroutines "enable"
+    }
+}
+
+tasks.withType(Test) {
+    testLogging {
+        events "started", "passed", "skipped", "failed"
     }
 }
