@@ -1,0 +1,101 @@
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2015 Piasy
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+apply plugin: 'checkstyle'
+apply plugin: 'findbugs'
+apply plugin: 'pmd'
+
+// Add checkstyle, findbugs, pmd and lint to the check task.
+check.dependsOn 'checkstyle', 'findbugs', 'pmd', 'lint', 'detektCheck'
+// to speed up Instant Run
+//preBuild.dependsOn 'checkstyle'
+
+detekt {
+    version = "1.0.0.RC6-4"
+    profile("main") {
+        input = "${project.rootDir}/${project.getName()}/src/main/java"
+        config = "${project.rootDir}/AndroidCodeQualityConfig/quality/detekt/detekt-config.yml"
+        filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
+        output = "${project.rootDir}/${project.getName()}/build/reports/detekt"
+    }
+}
+
+checkstyle {
+    // will fire "java.lang.ClassNotFoundException: com.puppycrawl.tools.checkstyle
+    // .CheckStyleTask" with version 6.10.1
+    toolVersion '6.13'
+
+    configFile file("${project.rootDir}/AndroidCodeQualityConfig/quality/checkstyle/checkstyle.xml")
+    configProperties.checkstyleSuppressionFilterPath = file(
+            "${project.rootDir}/AndroidCodeQualityConfig/quality/checkstyle/suppressions.xml")
+            .absolutePath
+}
+task checkstyle(type: Checkstyle, group: 'verification') {
+    source 'src'
+    include '**/*.java'
+    exclude '**/gen/**'
+    classpath = files()
+}
+
+findbugs {
+    toolVersion = "3.0.1"
+    ignoreFailures = false
+    effort = "max"
+    reportLevel = "high"
+    excludeFilter = new File("${project.rootDir}/AndroidCodeQualityConfig/quality/findbugs/findbugs-filter.xml")
+}
+task findbugs(type: FindBugs, dependsOn: assemble, group: 'verification') {
+    classes = files("${project.rootDir}/${project.getName()}/build/intermediates/classes")
+    source 'src'
+    include '**/*.java'
+    exclude '**/gen/**'
+
+    reports {
+        xml.enabled = false
+        html.enabled = true
+        xml.setDestination(new File("${project.rootDir}/${project.getName()}/build/reports/findbugs/findbugs.xml"))
+        html.setDestination(new File("${project.rootDir}/${project.getName()}/build/reports/findbugs/findbugs.html"))
+    }
+
+    classpath = files()
+}
+
+pmd {
+    toolVersion = '5.7.0'
+    ignoreFailures = false
+    ruleSetFiles = files("${project.rootDir}/AndroidCodeQualityConfig/quality/pmd/pmd-ruleset.xml")
+    ruleSets = []
+}
+task pmd(type: Pmd, group: 'verification') {
+    source 'src'
+    include '**/*.java'
+    exclude '**/gen/**'
+
+    reports {
+        xml.enabled = false
+        html.enabled = true
+        xml.setDestination(new File("${project.rootDir}/${project.getName()}/build/reports/pmd/pmd.xml"))
+        html.setDestination(new File("${project.rootDir}/${project.getName()}/build/reports/pmd/pmd.html"))
+    }
+}
