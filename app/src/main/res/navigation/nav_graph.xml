@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_search"
+        android:name="com.itis.android.githubapp.ui.search.SearchFragment"
+        android:label="SearchFragment"
+        tools:layout="@layout/fragment_search"/>
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.itis.android.githubapp.ui.user.UserFragment"
+        android:label="UserFragment"/>
+
+    <fragment
+        android:id="@+id/navigation_account"
+        android:name="com.itis.android.githubapp.ui.account.AccountFragment"
+        android:label="AccountFragment" >
+        <action
+            android:id="@+id/action_navigation_account_to_repoFragment"
+            app:destination="@id/repoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/repoFragment"
+        android:name="com.itis.android.githubapp.ui.repo.RepoFragment"
+        android:label="RepoFragment" />
+
+</navigation>

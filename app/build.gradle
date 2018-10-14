@@ -1,0 +1,108 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.itis.android.githubapp"
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
+    buildTypes.each {
+        it.buildConfigField 'String', 'API_ENDPOINT', baseUrl
+        it.buildConfigField 'String', 'CLIENT_ID', clientId
+        it.buildConfigField 'String', 'CLIENT_SECRET', clientSecret
+    }
+    sourceSets{
+        main.java.srcDirs += 'src/main/kotlin/'
+    }
+}
+
+ext {
+    androidx = "1.0.0"
+    arch = "2.0.0"
+    coroutines = "0.30.2"
+    gson = "2.8.2"
+    kodein = "5.0.0"
+    nav_version = "1.0.0-alpha06"
+    okhttp = "3.11.0"
+    okhttp3downloader = "1.1.0"
+    picasso = "2.5.2"
+    support = "28.0.0"
+    retrofit = "2.4.0"
+    room = "1.1.0"
+    rxjava = "2.2.0"
+    rxandroid = "2.0.2"
+    reactive_streams = "1.0.0"
+    stetho = "1.5.0"
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    // Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines"
+    // Support
+    implementation "androidx.appcompat:appcompat:$androidx"
+    implementation "com.google.android.material:material:$androidx"
+    implementation "androidx.recyclerview:recyclerview:$androidx"
+
+    // ViewModel and LiveData
+    implementation "androidx.lifecycle:lifecycle-extensions:$arch"
+    implementation "androidx.lifecycle:lifecycle-reactivestreams:$arch"
+    kapt "androidx.lifecycle:lifecycle-compiler:$arch"
+    // Navigation
+    implementation "android.arch.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "android.arch.navigation:navigation-ui-ktx:$nav_version"
+
+    // Retrofit
+    implementation "com.squareup.retrofit2:retrofit:${retrofit}"
+    implementation "com.squareup.retrofit2:converter-gson:${retrofit}"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:${retrofit}"
+    implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
+    // OkHttp
+    implementation "com.squareup.okhttp3:okhttp:${okhttp}"
+    implementation "com.squareup.okhttp3:logging-interceptor:${okhttp}"
+    // Gson
+    implementation "com.google.code.gson:gson:${gson}"
+    // Kodein
+    implementation "org.kodein.di:kodein-di-generic-jvm:${kodein}"
+    implementation "org.kodein.di:kodein-di-framework-android:${kodein}"
+    // Rx
+    implementation "io.reactivex.rxjava2:rxkotlin:${rxjava}"
+    implementation "io.reactivex.rxjava2:rxandroid:${rxandroid}"
+    implementation "org.reactivestreams:reactive-streams:${reactive_streams}"
+    // Picasso
+    implementation "com.squareup.picasso:picasso:${picasso}"
+    implementation "com.jakewharton.picasso:picasso2-okhttp3-downloader:${okhttp3downloader}"
+    // Stetho
+    implementation "com.facebook.stetho:stetho:${stetho}"
+    implementation "com.facebook.stetho:stetho-okhttp3:${stetho}"
+
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.1.0-beta01'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-beta01'
+}
+
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
+}

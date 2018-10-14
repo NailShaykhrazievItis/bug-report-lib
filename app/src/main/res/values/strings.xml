@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">GitHubApp</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="menu_search">Search</string>
+    <string name="menu_user">Users</string>
+    <string name="menu_account">Account</string>
+</resources>
