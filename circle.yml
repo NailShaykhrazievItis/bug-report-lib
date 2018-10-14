@@ -4,8 +4,10 @@ jobs:
     working_directory: ~/code
     docker:
       - image: circleci/android:api-27-node8-alpha
+    machine: java: version: openjdk8
     environment:
         JVM_OPTS: -Xmx3200m
+        ANDROID_HOME: /usr/local/android-sdk-linux
     steps:
       - checkout
       - restore_cache:
