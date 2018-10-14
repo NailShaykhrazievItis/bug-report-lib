@@ -19,6 +19,5 @@ class MainActivity : AppCompatActivity() {
         navController.navigate(R.id.action_navigation_account_to_repoFragment)
     }
 
-    override fun onSupportNavigateUp()
-            = findNavController(R.id.hostFragment).navigateUp()
+    override fun onSupportNavigateUp() = findNavController(R.id.hostFragment).navigateUp()
 }

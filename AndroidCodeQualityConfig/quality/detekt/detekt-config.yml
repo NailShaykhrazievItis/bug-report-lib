@@ -219,7 +219,7 @@ potential-bugs:
   LateinitUsage:
     active: true
     excludeAnnotatedProperties: "InjectPresenter, InjectExtra"
-    ignoreOnClassesPattern: ""
+    ignoreOnClassesPattern: "kodein.kt"
   UnconditionalJumpStatementInLoop:
     active: true
   UnreachableCode:
