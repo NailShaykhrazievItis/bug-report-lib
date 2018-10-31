@@ -5,4 +5,7 @@
     <string name="menu_search">Search</string>
     <string name="menu_user">Users</string>
     <string name="menu_account">Account</string>
+
+    <string name="login">Login</string>
+    <string name="password">Password</string>
 </resources>
