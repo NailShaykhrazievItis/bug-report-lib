@@ -103,12 +103,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
 }
 
-kotlin {
-    experimental {
-        coroutines "enable"
-    }
-}
-
 tasks.withType(Test) {
     testLogging {
         events "started", "passed", "skipped", "failed"
