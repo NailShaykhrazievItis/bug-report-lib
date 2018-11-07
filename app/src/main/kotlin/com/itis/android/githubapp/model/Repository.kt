@@ -3,9 +3,6 @@ package com.itis.android.githubapp.model
 import com.google.gson.annotations.SerializedName
 import java.util.*
 
-/**
- * Created by Nail Shaykhraziev on 07.10.2018.
- */
 data class Repository(var id: Int = 0,
                       var name: String,
                       @SerializedName("full_name")

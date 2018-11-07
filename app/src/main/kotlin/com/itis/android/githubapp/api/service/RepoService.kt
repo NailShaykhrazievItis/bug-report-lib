@@ -6,9 +6,6 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-/**
- * Created by Nail Shaykhraziev on 29.04.2018.
- */
 interface RepoService {
 
     @GET("user/repos")

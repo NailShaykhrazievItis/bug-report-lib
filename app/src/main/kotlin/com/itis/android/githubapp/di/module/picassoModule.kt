@@ -10,9 +10,6 @@ import org.kodein.di.generic.instance
 import org.kodein.di.generic.provider
 import org.kodein.di.generic.singleton
 
-/**
- * Created by Nail Shaykhraziev on 28.04.2018.
- */
 fun picassoModule() = Kodein.Module {
     bind<Picasso>() with singleton { providePicasso(instance(), instance()) }
     bind<OkHttp3Downloader>() with provider { provideOkHttp3Downloader(instance()) }

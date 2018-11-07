@@ -17,9 +17,6 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
-/**
- * Created by Nail Shaykhraziev on 28.04.2018.
- */
 fun netModule() = Kodein.Module {
 
     bind<Interceptor>(tag = "logging") with singleton { LoggingInterceptor() }

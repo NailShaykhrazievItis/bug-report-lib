@@ -13,9 +13,6 @@ import com.itis.android.githubapp.utils.textInput
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk27.coroutines.onClick
 
-/**
- * Created by Nail Shaykhraziev on 11.10.2018.
- */
 class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

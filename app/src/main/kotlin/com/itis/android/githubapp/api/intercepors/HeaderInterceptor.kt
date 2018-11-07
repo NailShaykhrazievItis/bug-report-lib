@@ -4,9 +4,6 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
 
-/**
- * Created by Nail Shaykhraziev on 08.10.2018.
- */
 class HeaderInterceptor : Interceptor {
 
     @Throws(IOException::class)

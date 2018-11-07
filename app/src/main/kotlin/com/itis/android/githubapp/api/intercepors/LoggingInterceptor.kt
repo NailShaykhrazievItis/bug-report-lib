@@ -6,9 +6,6 @@ import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import java.io.IOException
 
-/**
- * Created by Nail Shaykhraziev on 28.04.2018.
- */
 class LoggingInterceptor(
         private val loggingInterceptor: HttpLoggingInterceptor =
                 HttpLoggingInterceptor().setLevel(
