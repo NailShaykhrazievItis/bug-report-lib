@@ -33,7 +33,7 @@ references:
       - image: circleci/android:api-28-alpha
     environment:
       TERM: dumb
-      JAVA_OPTIONS: "-Xmx2048m -XX:+UnlockExperimentalVMOptions -XX:ParallelGCThreads=2 -XX:ConcGCThreads=2 -XX:ParallelGCThreads=2 -Djava.util.concurrent.ForkJoinPool.common.parallelism=2"
+      JAVA_OPTIONS: "-Xmx2048m"
       GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m"'
 
 jobs:
