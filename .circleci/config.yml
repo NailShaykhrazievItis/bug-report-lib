@@ -43,7 +43,7 @@ jobs:
       - checkout
       - *restore_cache
       - run:
-          name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
+          name: Chmod permissions
           command: sudo chmod +x ./gradlew
       - run:
           name: Download Dependencies
@@ -58,6 +58,9 @@ jobs:
       - *attach_release_workspace
       - *restore_cache
       - run:
+          name: Chmod permissions
+          command: sudo chmod +x ./gradlew
+      - run:
           name: Run Checkstyle
           command: ./gradlew checkstyle pmd detektCheck lintProductionRelease
       - store_artifacts:
@@ -70,6 +73,9 @@ jobs:
         - checkout
         - *attach_release_workspace
         - *restore_cache
+        - run:
+           name: Chmod permissions
+           command: sudo chmod +x ./gradlew
         - run:
             name: Run unit tests
             command: ./gradlew testProductionReleaseUnitTest -no-daemon -Pkotlin.incremental=false --max-workers=2
