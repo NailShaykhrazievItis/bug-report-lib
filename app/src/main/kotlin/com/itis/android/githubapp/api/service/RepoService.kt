@@ -13,7 +13,7 @@ interface RepoService {
     fun getUserRepos(@Query("page") page: Int,
                      @Query("type") type: String,
                      @Query("sort") sort: String,
-                     @Query("direction") direction: String): Single<ArrayList<Repository>>
+                     @Query("direction") direction: String): Single<List<Repository>>
 
     @GET("user/repos")
     fun getUserReposCall(@Query("page") page: Int,
@@ -26,7 +26,7 @@ interface RepoService {
                            @Query("page") page: Int? = null,
                            @Query("type") type: String? = null,
                            @Query("sort") sort: String? = null,
-                           @Query("direction") direction: String? = null): Single<ArrayList<Repository>>
+                           @Query("direction") direction: String? = null): Single<List<Repository>>
 
     @GET("repos/{owner}/{name}")
     fun getRepository(@Path("owner") owner: String,

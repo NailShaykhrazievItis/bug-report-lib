@@ -17,8 +17,6 @@ class MainActivity : AppCompatActivity() {
         bnv_main.setupWithNavController(navController)
 
         navController.navigate(R.id.action_navigation_account_to_repoFragment)
-
-
     }
 
     override fun onSupportNavigateUp() = findNavController(R.id.hostFragment).navigateUp()

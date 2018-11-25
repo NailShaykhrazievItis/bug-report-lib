@@ -29,7 +29,7 @@ class LoginActivity : AppCompatActivity() {
         override fun createView(ui: AnkoContext<LoginActivity>): View = with(ui) {
             verticalLayout {
                 padding = dip(24)
-                imageView(android.R.drawable.ic_menu_manage).lparams {
+                imageView(R.mipmap.ic_launcher_foreground).lparams {
                     margin = dip(16)
                     gravity = Gravity.CENTER
                 }
