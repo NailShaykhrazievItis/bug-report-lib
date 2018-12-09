@@ -1,4 +1,4 @@
-package com.itis.android.githubapp.utils
+package com.itis.android.githubapp.utils.extensions
 
 import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
