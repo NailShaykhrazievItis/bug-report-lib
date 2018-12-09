@@ -78,7 +78,6 @@ class LoginActivity : AppCompatActivity(), KodeinAware {
                             hintResource = R.string.password
                             inputType = TYPE_CLASS_TEXT or TYPE_TEXT_VARIATION_PASSWORD
                             textSize = 16f
-                            setText("NAIL!9itis")
                         }
                     }.lparams(width = matchParent, height = wrapContent) {
                         topMargin = dip(16)
