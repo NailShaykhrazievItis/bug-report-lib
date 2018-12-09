@@ -1,6 +1,6 @@
 @file:Suppress("NOTHING_TO_INLINE", "unused")
 
-package com.itis.android.githubapp.utils
+package com.itis.android.githubapp.utils.anko
 
 import android.view.ViewManager
 import androidx.appcompat.widget.AppCompatButton

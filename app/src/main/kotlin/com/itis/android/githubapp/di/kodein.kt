@@ -1,17 +1,14 @@
 package com.itis.android.githubapp.di
 
 import android.app.Application
-import com.itis.android.githubapp.di.module.appModule
-import com.itis.android.githubapp.di.module.netModule
-import com.itis.android.githubapp.di.module.picassoModule
+import com.itis.android.githubapp.di.module.*
 import org.kodein.di.Kodein
 
-lateinit var di: Kodein
-
-fun initKodein(app: Application) {
-    di = Kodein {
-        import(appModule(app))
-        import(netModule())
-        import(picassoModule())
-    }
-}
+fun initKodein(app: Application) =
+        Kodein.lazy {
+            import(appModule(app))
+            import(netModule())
+            import(picassoModule())
+            import(domainModule())
+            import(viewModelModule())
+        }

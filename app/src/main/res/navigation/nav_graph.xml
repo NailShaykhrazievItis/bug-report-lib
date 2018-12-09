@@ -20,11 +20,11 @@
         android:name="com.itis.android.githubapp.ui.account.AccountFragment"
         android:label="AccountFragment" >
         <action
-            android:id="@+id/action_navigation_account_to_repoFragment"
-            app:destination="@id/repoFragment" />
+            android:id="@+id/action_navigation_account_to_navigation_repo"
+            app:destination="@id/navigation_repo" />
     </fragment>
     <fragment
-        android:id="@+id/repoFragment"
+        android:id="@+id/navigation_repo"
         android:name="com.itis.android.githubapp.ui.repo.RepoFragment"
         android:label="RepoFragment" />
 
