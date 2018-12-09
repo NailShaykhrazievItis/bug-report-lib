@@ -2,20 +2,22 @@ package com.itis.android.githubapp.ui.auth
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.itis.android.githubapp.api.service.AuthService
 import com.itis.android.githubapp.model.common.Outcome
+import com.itis.android.githubapp.repository.AuthRepository
 import com.itis.android.githubapp.repository.PreferenceRepository
 import com.itis.android.githubapp.repository.UserRepository
 import io.reactivex.rxkotlin.subscribeBy
 
 class LoginViewModel(
-        private val userRepository: UserRepository,
+        private val authService: AuthRepository,
         private val preferenceRepository: PreferenceRepository
 ) : ViewModel() {
 
     private val result = MutableLiveData<Outcome<String>>()
 
     fun auth(login: String, password: String): MutableLiveData<Outcome<String>> {
-        userRepository.auth(login, password)
+        authService.auth(login, password)
                 .map {
                     preferenceRepository.saveAuthToken(it.token)
                     it

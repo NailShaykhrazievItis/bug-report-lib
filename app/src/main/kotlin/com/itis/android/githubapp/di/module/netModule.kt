@@ -4,6 +4,7 @@ import com.itis.android.githubapp.BuildConfig
 import com.itis.android.githubapp.api.intercepors.ApiKeyInterceptor
 import com.itis.android.githubapp.api.intercepors.HeaderInterceptor
 import com.itis.android.githubapp.api.intercepors.LoggingInterceptor
+import com.itis.android.githubapp.api.service.AuthService
 import com.itis.android.githubapp.api.service.RepoService
 import com.itis.android.githubapp.api.service.SearchService
 import com.itis.android.githubapp.api.service.UserService
@@ -30,6 +31,7 @@ fun netModule() = Kodein.Module(name = "netModule") {
     }
     bind<Retrofit>() with singleton { provideRetrofit(instance()) }
 
+    bind<AuthService>() with singleton { instance<Retrofit>().create(AuthService::class.java) }
     bind<RepoService>() with singleton { instance<Retrofit>().create(RepoService::class.java) }
     bind<UserService>() with singleton { instance<Retrofit>().create(UserService::class.java) }
     bind<SearchService>() with singleton { instance<Retrofit>().create(SearchService::class.java) }
