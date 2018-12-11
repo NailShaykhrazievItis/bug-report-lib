@@ -9,11 +9,11 @@ import retrofit2.http.Path
 interface UserService {
 
     @GET("users/{login}")
-    suspend fun getUser(@Path("login") login: String): Deferred<User>
+    fun getUser(@Path("login") login: String): Single<User>
 
     @GET("user")
-    suspend fun getUserByToken(): Single<User>
+    fun getUserByToken(): Single<User>
 
     @GET("users/{user}/orgs")
-    suspend fun getUserOrgs(@Path("user") user: String): Deferred<List<User>>
+    fun getUserOrgs(@Path("user") user: String): Single<List<User>>
 }

@@ -7,11 +7,14 @@
     android:layout_height="match_parent"
     tools:context=".ui.MainActivity">
 
+    <include layout="@layout/layout_toolbar_main" />
+
     <fragment
         android:id="@+id/hostFragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
         android:layout_marginBottom="?attr/actionBarSize"
         app:defaultNavHost="true"
         app:navGraph="@navigation/nav_graph" />
@@ -22,9 +25,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="@color/color_primary"
-        app:labelVisibilityMode="labeled"
         app:itemIconTint="@drawable/bot_nav_item_selector"
         app:itemTextColor="@drawable/bot_nav_item_selector"
+        app:labelVisibilityMode="labeled"
         app:menu="@menu/navigation" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

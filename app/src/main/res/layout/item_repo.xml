@@ -1,8 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp">
 
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_primary"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="REPONAME" />
 
+    <TextView
+        android:id="@+id/tv_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_secondary"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_name"
+        tools:text="MY INTERESTING DESC" />
+
+    <TextView
+        android:id="@+id/tv_language"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_secondary"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_desc"
+        tools:text="Kotlin" />
+
+    <TextView
+        android:id="@+id/tv_stars"
+        style="@style/RepoItemProperties"
+        android:drawableStart="@drawable/ic_star"
+        app:layout_constraintStart_toEndOf="@id/tv_language"
+        app:layout_constraintTop_toBottomOf="@id/tv_desc"
+        tools:text="6" />
+
+    <TextView
+        android:id="@+id/tv_fork"
+        style="@style/RepoItemProperties"
+        android:drawableStart="@drawable/ic_repo_forked"
+        app:layout_constraintStart_toEndOf="@id/tv_stars"
+        app:layout_constraintTop_toBottomOf="@id/tv_desc"
+        tools:text="15" />
+
+    <TextView
+        android:id="@+id/tv_last_update"
+        style="@style/RepoItemProperties"
+        android:drawableStart="@drawable/ic_timer_24dp"
+        app:layout_constraintStart_toEndOf="@id/tv_fork"
+        app:layout_constraintTop_toBottomOf="@id/tv_desc"
+        tools:text="15 min ago" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

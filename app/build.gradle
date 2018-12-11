@@ -42,6 +42,7 @@ ext {
     anko = "0.10.8"
     arch = "2.0.0"
     coroutines = "1.0.0"
+    glide = "4.8.0"
     gson = "2.8.2"
     kodein = "5.3.0"
     nav_version = "1.0.0-alpha08"
@@ -99,6 +100,8 @@ dependencies {
     implementation "com.facebook.stetho:stetho-okhttp3:${stetho}"
     //Anko
     implementation "org.jetbrains.anko:anko:${anko}"
+    // Glide
+    implementation "com.github.bumptech.glide:glide:${glide}"
 
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
     testImplementation 'junit:junit:4.12'

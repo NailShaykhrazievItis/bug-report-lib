@@ -10,16 +10,16 @@ import retrofit2.http.Query
 interface RepoService {
 
     @GET("user/repos")
-    fun getUserRepos(@Query("page") page: Int,
-                     @Query("type") type: String,
-                     @Query("sort") sort: String,
-                     @Query("direction") direction: String): Single<List<Repository>>
+    fun getUserRepos(@Query("page") page: Int? = null,
+                     @Query("type") type: String? = null,
+                     @Query("sort") sort: String? = null,
+                     @Query("direction") direction: String? = null): Single<List<Repository>>
 
     @GET("user/repos")
     fun getUserReposCall(@Query("page") page: Int,
-                     @Query("type") type: String,
-                     @Query("sort") sort: String,
-                     @Query("direction") direction: String): Call<List<Repository>>
+                         @Query("type") type: String,
+                         @Query("sort") sort: String,
+                         @Query("direction") direction: String): Call<List<Repository>>
 
     @GET("users/{user}/repos")
     fun getUserPublicRepos(@Path("user") user: String,
