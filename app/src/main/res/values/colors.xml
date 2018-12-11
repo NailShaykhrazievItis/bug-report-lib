@@ -10,5 +10,9 @@
     <color name="divider">#BDBDBD</color>
 
     <color name="ic_launcher_background">#1F76B6</color>
+
+    <color name="black_10">#1A000000</color>
+    <color name="bkg_gray_light">#DDDDDD</color>
+
 </resources>
 

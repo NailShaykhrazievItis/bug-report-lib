@@ -11,20 +11,17 @@ data class Repository(var id: Int = 0,
                       var repPrivate: Boolean = false,
                       @SerializedName("html_url")
                       var htmlUrl: String,
-                      var description: String,
+                      var description: String?,
                       var language: String,
                       var owner: User,
-
                       @SerializedName("default_branch")
                       var defaultBranch: String,
-
                       @SerializedName("created_at")
                       var createdAt: Date,
                       @SerializedName("updated_at")
                       var updatedAt: Date,
                       @SerializedName("pushed_at")
                       var pushedAt: Date,
-
                       @SerializedName("git_url")
                       var gitUrl: String,
                       @SerializedName("ssh_url")
@@ -33,7 +30,6 @@ data class Repository(var id: Int = 0,
                       var cloneUrl: String,
                       @SerializedName("svn_url")
                       var svnUrl: String,
-
                       var size: Int = 0,
                       @SerializedName("stargazers_count")
                       var stargazersCount: Int = 0,
@@ -45,10 +41,8 @@ data class Repository(var id: Int = 0,
                       var openIssuesCount: Int = 0,
                       @SerializedName("subscribers_count")
                       var subscribersCount: Int = 0,
-
                       var fork: Boolean = false,
                       var parent: Repository,
-
                       @SerializedName("has_issues")
                       var hasIssues: Boolean = false,
                       @SerializedName("has_projects")
@@ -59,6 +53,5 @@ data class Repository(var id: Int = 0,
                       var hasWiki: Boolean = false,
                       @SerializedName("has_pages")
                       var hasPages: Boolean = false,
-
                       var sinceStargazersCount: Int = 0
 )
