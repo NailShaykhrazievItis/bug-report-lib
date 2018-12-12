@@ -12,7 +12,7 @@ class LoginViewModel(
         private val preferenceRepository: PreferenceRepository
 ) : ViewModel() {
 
-    private val result = MutableLiveData<Outcome<String>>()
+    private val _result by lazy { MutableLiveData<Outcome<String>>() }
 
     fun auth(login: String, password: String): MutableLiveData<Outcome<String>> {
         authRepository.auth(login, password)
@@ -20,13 +20,13 @@ class LoginViewModel(
                     preferenceRepository.saveAuthToken(it.token)
                     it
                 }
-                .doOnSubscribe { result.value = Outcome.loading(true) }
-                .doAfterTerminate { result.value = Outcome.loading(false) }
+                .doOnSubscribe { _result.value = Outcome.loading(true) }
+                .doAfterTerminate { _result.value = Outcome.loading(false) }
                 .subscribeBy(onSuccess = {
-                    result.value = Outcome.success(it.token)
+                    _result.value = Outcome.success(it.token)
                 }, onError = {
-                    result.value = Outcome.failure(it)
+                    _result.value = Outcome.failure(it)
                 })
-        return result
+        return _result
     }
 }

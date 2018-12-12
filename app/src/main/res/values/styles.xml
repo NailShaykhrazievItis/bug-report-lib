@@ -48,4 +48,14 @@
         <item name="android:drawablePadding">2dp</item>
     </style>
 
+    <style name="ProfileCardViewStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white_80</item>
+        <item name="android:elevation">4dp</item>
+        <item name="contentPadding">16dp</item>
+        <item name="cardBackgroundColor">@color/white_80</item>
+        <item name="cardCornerRadius">4dp</item>
+    </style>
+
 </resources>

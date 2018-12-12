@@ -1,9 +1,6 @@
 package com.itis.android.githubapp.di.module
 
-import com.itis.android.githubapp.repository.AuthRepository
-import com.itis.android.githubapp.repository.PreferenceRepository
-import com.itis.android.githubapp.repository.RepoRepository
-import com.itis.android.githubapp.repository.UserRepository
+import com.itis.android.githubapp.repository.*
 import org.kodein.di.Kodein
 import org.kodein.di.generic.bind
 import org.kodein.di.generic.instance
@@ -17,4 +14,5 @@ fun domainModule() = Kodein.Module(name = "domainModule") {
     bind<UserRepository>() with provider { UserRepository(instance()) }
     bind<AuthRepository>() with provider { AuthRepository(instance()) }
     bind<RepoRepository>() with provider { RepoRepository(instance()) }
+    bind<SearchRepository>() with provider { SearchRepository(instance()) }
 }

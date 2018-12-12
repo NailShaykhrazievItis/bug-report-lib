@@ -12,6 +12,17 @@
     <color name="ic_launcher_background">#1F76B6</color>
 
     <color name="black_10">#1A000000</color>
+
+    <color name="white_90">#E6FFFFFF</color>
+    <color name="white_80">#CCFFFFFF</color>
+    <color name="white_70">#B3FFFFFF</color>
+    <color name="white_60">#99FFFFFF</color>
+    <color name="white_50">#80FFFFFF</color>
+    <color name="white_40">#66FFFFFF</color>
+    <color name="white_30">#4DFFFFFF</color>
+    <color name="white_20">#33FFFFFF</color>
+    <color name="white_10">#1AFFFFFF</color>
+
     <color name="bkg_gray_light">#DDDDDD</color>
 
 </resources>
