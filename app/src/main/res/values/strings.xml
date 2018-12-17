@@ -8,7 +8,7 @@
 
     <string name="login">Login</string>
     <string name="password">Password</string>
-    // Profile
+    <!--Profile-->
     <string name="following">Following</string>
     <string name="followers">Followers</string>
     <string name="options">Options</string>
@@ -20,4 +20,7 @@
     <string name="bio">Bio</string>
     <string name="company">Company</string>
     <string name="location">Location</string>
+    <!--Search-->
+    <string name="search_hint">Search repository or user</string>
+    <string name="results">Results</string>
 </resources>

@@ -3,6 +3,7 @@ package com.itis.android.githubapp.di.module
 import androidx.lifecycle.ViewModelProvider
 import com.itis.android.githubapp.ui.auth.LoginViewModel
 import com.itis.android.githubapp.ui.profile.ProfileViewModel
+import com.itis.android.githubapp.ui.search.SearchViewModel
 import com.itis.android.githubapp.ui.splash.SplashScreenViewModel
 import com.itis.android.githubapp.utils.extensions.bindViewModel
 import com.itis.android.githubapp.utils.vm.ViewModelFactory
@@ -19,4 +20,5 @@ fun viewModelModule() = Kodein.Module(name = "viewModelModule") {
     bindViewModel<LoginViewModel>() with provider { LoginViewModel(instance(), instance()) }
     bindViewModel<SplashScreenViewModel>() with provider { SplashScreenViewModel(instance()) }
     bindViewModel<ProfileViewModel>() with provider { ProfileViewModel(instance(), instance()) }
+    bindViewModel<SearchViewModel>() with provider { SearchViewModel(instance()) }
 }

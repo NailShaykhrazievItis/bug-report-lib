@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.hostFragment)
 
         bnv_main.setupWithNavController(navController)
-        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+        navController.addOnDestinationChangedListener { _, destination, _ ->
             toolbar.setTitle(when (destination.id) {
                 R.id.navigation_profile -> R.string.menu_profile
                 R.id.navigation_home -> R.string.menu_home
