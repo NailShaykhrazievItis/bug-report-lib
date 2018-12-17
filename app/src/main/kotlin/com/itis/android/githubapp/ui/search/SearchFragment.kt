@@ -6,8 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DividerItemDecoration
+import com.bumptech.glide.Glide
 import com.itis.android.githubapp.R
 import com.itis.android.githubapp.model.common.Outcome
+import com.itis.android.githubapp.ui.adapters.SearchAdapter
+import com.itis.android.githubapp.utils.anko.toast
 import com.itis.android.githubapp.utils.extensions.provideViewModel
 import com.itis.android.githubapp.utils.functions.observableFromSearchView
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -21,14 +25,25 @@ import java.util.concurrent.TimeUnit
 class SearchFragment : Fragment(), KodeinAware {
 
     override val kodein: Kodein by closestKodein()
-    private var searchDisposable: Disposable? = null
     private val viewModel: SearchViewModel by provideViewModel()
+    private var searchDisposable: Disposable? = null
+    private var searchAdapter: SearchAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             inflater.inflate(R.layout.fragment_search, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initRecycler()
+        initObservers()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        searchDisposable?.dispose()
+    }
+
+    private fun initObservers() {
         viewModel.isLoading().observe(this, Observer {
             pb_search_progress.visibility = if (it) View.VISIBLE else View.GONE
         })
@@ -42,14 +57,22 @@ class SearchFragment : Fragment(), KodeinAware {
         viewModel.results.observe(this, Observer {
             when (it) {
                 is Outcome.Success -> {
-
+                    tv_title_result.visibility = if (it.data.isNotEmpty()) View.VISIBLE else View.GONE
+                    searchAdapter?.submitList(it.data)
+                }
+                is Outcome.Failure -> {
+                    toast(it.error.message)
                 }
             }
         })
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        searchDisposable?.dispose()
+    private fun initRecycler() {
+        searchAdapter = SearchAdapter(Glide.with(this))
+        activity?.let {
+            val divider = DividerItemDecoration(it, DividerItemDecoration.VERTICAL)
+            rv_search.addItemDecoration(divider)
+        }
+        rv_search.adapter = searchAdapter
     }
 }
