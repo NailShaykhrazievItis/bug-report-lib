@@ -23,4 +23,6 @@
     <!--Search-->
     <string name="search_hint">Search repository or user</string>
     <string name="results">Results</string>
+    <!--Repo Details-->
+    <string name="info">Info</string>
 </resources>

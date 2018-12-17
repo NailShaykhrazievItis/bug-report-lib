@@ -12,7 +12,7 @@ data class Repository(var id: Int = 0,
                       @SerializedName("html_url")
                       var htmlUrl: String,
                       var description: String?,
-                      var language: String,
+                      var language: String?,
                       var owner: User,
                       @SerializedName("default_branch")
                       var defaultBranch: String,

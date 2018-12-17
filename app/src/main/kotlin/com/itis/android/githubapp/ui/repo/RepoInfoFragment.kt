@@ -7,8 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.itis.android.githubapp.R
 
-class RepoFragment : Fragment() {
+class RepoInfoFragment : Fragment() {
+
+    companion object {
+
+        fun newInstance(): RepoInfoFragment = RepoInfoFragment()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-            inflater.inflate(R.layout.fragment_repo, container, false)
+            inflater.inflate(R.layout.fragment_repo_info, container, false)
+
 }

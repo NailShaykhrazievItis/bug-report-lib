@@ -1,16 +1,18 @@
 package com.itis.android.githubapp.ui.profile
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.itis.android.githubapp.R
 import com.itis.android.githubapp.model.common.Outcome
 import com.itis.android.githubapp.ui.adapters.ReposAdapter
+import com.itis.android.githubapp.ui.repodetails.RepoDetailsActivity
+import com.itis.android.githubapp.ui.repodetails.RepoDetailsActivity.Companion.EXTRA_REPO_NAME
 import com.itis.android.githubapp.utils.extensions.provideViewModel
 import kotlinx.android.synthetic.main.fragment_profile.*
 import org.kodein.di.Kodein
@@ -35,7 +37,13 @@ class ProfileFragment : Fragment(), KodeinAware {
     }
 
     private fun initAdapter() {
-        adapter = ReposAdapter()
+        adapter = ReposAdapter { repo ->
+            activity?.let {
+                val intent = Intent(it, RepoDetailsActivity::class.java)
+                intent.putExtra(EXTRA_REPO_NAME, repo.name)
+                startActivity(intent)
+            }
+        }
         rv_repo.adapter = adapter
     }
 

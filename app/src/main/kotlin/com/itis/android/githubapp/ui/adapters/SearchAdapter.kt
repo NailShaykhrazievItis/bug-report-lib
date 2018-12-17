@@ -9,7 +9,10 @@ import com.itis.android.githubapp.R
 import com.itis.android.githubapp.model.Repository
 import com.itis.android.githubapp.ui.adapters.holder.SearchHolder
 
-class SearchAdapter(private val glideManager: RequestManager) : ListAdapter<Repository, SearchHolder>(
+class SearchAdapter(
+        private val glideManager: RequestManager,
+        private val repoClickLambda: (Repository) -> Unit
+) : ListAdapter<Repository, SearchHolder>(
         object : DiffUtil.ItemCallback<Repository>() {
 
             override fun areItemsTheSame(oldItem: Repository, newItem: Repository): Boolean = oldItem.id == newItem.id
@@ -24,6 +27,6 @@ class SearchAdapter(private val glideManager: RequestManager) : ListAdapter<Repo
     }
 
     override fun onBindViewHolder(holder: SearchHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), repoClickLambda)
     }
 }

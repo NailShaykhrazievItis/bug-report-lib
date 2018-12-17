@@ -1,5 +1,6 @@
 package com.itis.android.githubapp.ui.search
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.itis.android.githubapp.R
 import com.itis.android.githubapp.model.common.Outcome
 import com.itis.android.githubapp.ui.adapters.SearchAdapter
+import com.itis.android.githubapp.ui.repodetails.RepoDetailsActivity
 import com.itis.android.githubapp.utils.anko.toast
 import com.itis.android.githubapp.utils.extensions.provideViewModel
 import com.itis.android.githubapp.utils.functions.observableFromSearchView
@@ -68,7 +70,13 @@ class SearchFragment : Fragment(), KodeinAware {
     }
 
     private fun initRecycler() {
-        searchAdapter = SearchAdapter(Glide.with(this))
+        searchAdapter = SearchAdapter(Glide.with(this)) { repo ->
+            activity?.let {
+                val intent = Intent(it, RepoDetailsActivity::class.java)
+                intent.putExtra(RepoDetailsActivity.EXTRA_REPO_NAME, repo.name)
+                startActivity(intent)
+            }
+        }
         activity?.let {
             val divider = DividerItemDecoration(it, DividerItemDecoration.VERTICAL)
             rv_search.addItemDecoration(divider)
