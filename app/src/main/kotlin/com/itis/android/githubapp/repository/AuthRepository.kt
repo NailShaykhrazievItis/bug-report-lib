@@ -5,6 +5,7 @@ import com.google.gson.JsonObject
 import com.itis.android.githubapp.BuildConfig
 import com.itis.android.githubapp.api.service.AuthService
 import com.itis.android.githubapp.model.Authorization
+import com.itis.android.githubapp.model.common.Outcome
 import com.itis.android.githubapp.utils.extensions.subscribeSingleOnIoObserveOnUi
 import io.reactivex.Single
 
@@ -14,6 +15,16 @@ class AuthRepository(private val authService: AuthService) {
         val authorizationString = createAuthorizationString(login, password)
         return authService.authorize(authorizationString, createAuthorizationParam())
                 .subscribeSingleOnIoObserveOnUi()
+    }
+
+    suspend fun getAuth(login: String, password: String): Outcome<Authorization> {
+        val authorizationString = createAuthorizationString(login, password)
+        return try {
+            val auth = authService.getAuthorize(authorizationString, createAuthorizationParam())
+            Outcome.success(auth.await())
+        } catch (throwable: Throwable) {
+            Outcome.error(throwable)
+        }
     }
 
     private fun createAuthorizationString(login: String, password: String): String {

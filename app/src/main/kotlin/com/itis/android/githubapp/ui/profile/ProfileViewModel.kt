@@ -48,7 +48,7 @@ class ProfileViewModel(
                 .subscribeBy(onSuccess = {
                     _user.value = Outcome.success(it)
                 }, onError = {
-                    _user.value = Outcome.failure(it)
+                    _user.value = Outcome.error(it)
                 })
     }
 
@@ -59,7 +59,7 @@ class ProfileViewModel(
                 .subscribeBy(onSuccess = {
                     _repos.value = Outcome.success(it)
                 }, onError = {
-                    _repos.value = Outcome.failure(it)
+                    _repos.value = Outcome.error(it)
                 })
     }
 }

@@ -48,10 +48,10 @@ class ProfileFragment : Fragment(), KodeinAware {
     }
 
     private fun initObservers() {
-        viewModel.isLoading().observe(this, Observer {
+        viewModel.isLoading().observe(viewLifecycleOwner, Observer {
             progress.visibility = if (it) View.VISIBLE else View.GONE
         })
-        viewModel.getUser().observe(this, Observer {
+        viewModel.getUser().observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Outcome.Success -> {
                     tv_username.text = it.data.login
@@ -63,17 +63,17 @@ class ProfileFragment : Fragment(), KodeinAware {
                             .load(it.data.avatarUrl)
                             .into(iv_avatar)
                 }
-                is Outcome.Failure -> {
+                is Outcome.Error -> {
 
                 }
             }
         })
-        viewModel.getRepos().observe(this, Observer {
+        viewModel.getRepos().observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Outcome.Success -> {
                     adapter?.submitList(it.data)
                 }
-                is Outcome.Failure -> {
+                is Outcome.Error -> {
 
                 }
             }

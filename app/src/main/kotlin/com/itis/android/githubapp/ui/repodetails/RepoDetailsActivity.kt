@@ -44,10 +44,8 @@ class RepoDetailsActivity : AppCompatActivity() {
         fun setViewPager(viewPager: ViewPager) {
             val repoInfoFragment = RepoInfoFragment.newInstance()
             val repoInfoFragment2 = RepoInfoFragment.newInstance()
-            val repoInfoFragment3 = RepoInfoFragment.newInstance()
             adapter?.addFrag(repoInfoFragment, getString(R.string.info))
             adapter?.addFrag(repoInfoFragment2, "Branches")
-            adapter?.addFrag(repoInfoFragment3, "Files")
             viewPager.offscreenPageLimit = 2
             viewPager.adapter = adapter
         }

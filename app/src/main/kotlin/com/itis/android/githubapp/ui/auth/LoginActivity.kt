@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.itis.android.githubapp.R
-import com.itis.android.githubapp.model.common.Outcome
 import com.itis.android.githubapp.ui.MainActivity
 import com.itis.android.githubapp.utils.anko.buttonX
 import com.itis.android.githubapp.utils.anko.textInput
@@ -32,27 +31,28 @@ class LoginActivity : AppCompatActivity(), KodeinAware {
         super.onCreate(savedInstanceState)
         loginUI = LoginActivityUi()
         loginUI?.setContentView(this)
+        initObservers()
     }
 
-    fun hello(login: String, pass: String) {
-        viewModel.auth(login, pass).observe(this, Observer {
-            when (it) {
-                is Outcome.Progress -> {
-                    loginUI?.apply {
-                        progress.visibility = if (it.loading) View.VISIBLE else View.GONE
-                    }
-                }
-                is Outcome.Success -> {
-                    toast(it.data)
-                    startActivity<MainActivity>()
-                    finish()
-                }
-                is Outcome.Failure -> {
-                    toast("ERROR: ${it.error}")
-                }
+    private fun initObservers() {
+        viewModel.result().observe(this, Observer {
+            toast(it)
+            startActivity<MainActivity>()
+            finish()
+        })
+        viewModel.error().observe(this, Observer
+        {
+            toast("ERROR: $it")
+        })
+        viewModel.isLoading().observe(this, Observer
+        {
+            loginUI?.apply {
+                progress.visibility = if (it) View.VISIBLE else View.GONE
             }
         })
     }
+
+    fun login(login: String, pass: String) = viewModel.auth(login, pass)
 
     class LoginActivityUi : AnkoComponent<LoginActivity> {
 
@@ -86,7 +86,7 @@ class LoginActivity : AppCompatActivity(), KodeinAware {
                         setText(R.string.login)
                         setTextColor(ContextCompat.getColor(ui.owner, R.color.icons))
                         onClick {
-                            ui.owner.hello(tiLogin.editText?.text.toString(), tiPassword.editText?.text.toString())
+                            ui.owner.login(tiLogin.editText?.text.toString(), tiPassword.editText?.text.toString())
                         }
                     }.lparams(width = matchParent, height = wrapContent) {
                         topMargin = dip(24)

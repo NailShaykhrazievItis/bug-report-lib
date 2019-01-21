@@ -1,32 +1,50 @@
 package com.itis.android.githubapp.ui.auth
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.itis.android.githubapp.model.common.Outcome
 import com.itis.android.githubapp.repository.AuthRepository
 import com.itis.android.githubapp.repository.PreferenceRepository
-import io.reactivex.rxkotlin.subscribeBy
+import com.itis.android.githubapp.ui.base.BaseViewModel
+import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 
 class LoginViewModel(
         private val authRepository: AuthRepository,
         private val preferenceRepository: PreferenceRepository
-) : ViewModel() {
+) : BaseViewModel(), CoroutineScope {
 
-    private val _result by lazy { MutableLiveData<Outcome<String>>() }
+    private val job = Job()
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
 
-    fun auth(login: String, password: String): MutableLiveData<Outcome<String>> {
-        authRepository.auth(login, password)
-                .map {
-                    preferenceRepository.saveAuthToken(it.token)
-                    it
+    private lateinit var _result: MutableLiveData<String>
+
+    fun result(): MutableLiveData<String> {
+        if (!::_result.isInitialized) {
+            _result = MutableLiveData()
+        }
+        return _result
+    }
+
+    fun auth(login: String, password: String): MutableLiveData<String> {
+        _loading.postValue(true)
+        launch {
+            val result = withContext(Dispatchers.IO) {
+                authRepository.getAuth(login, password)
+            }
+            when (result) {
+                is Outcome.Success -> {
+                    launch(Dispatchers.IO) {
+                        preferenceRepository.saveAuthToken(result.data.token)
+                    }
+                    _result.postValue(result.data.token)
                 }
-                .doOnSubscribe { _result.value = Outcome.loading(true) }
-                .doAfterTerminate { _result.value = Outcome.loading(false) }
-                .subscribeBy(onSuccess = {
-                    _result.value = Outcome.success(it.token)
-                }, onError = {
-                    _result.value = Outcome.failure(it)
-                })
+                is Outcome.Error -> {
+                    _error.postValue(result.error)
+                }
+            }
+        }
+        _loading.postValue(false)
         return _result
     }
 }

@@ -46,7 +46,7 @@ class SearchFragment : Fragment(), KodeinAware {
     }
 
     private fun initObservers() {
-        viewModel.isLoading().observe(this, Observer {
+        viewModel.isLoading().observe(viewLifecycleOwner, Observer {
             pb_search_progress.visibility = if (it) View.VISIBLE else View.GONE
         })
         searchDisposable = observableFromSearchView(sv_main)
@@ -56,13 +56,13 @@ class SearchFragment : Fragment(), KodeinAware {
                 .subscribe {
                     viewModel.search(it)
                 }
-        viewModel.results.observe(this, Observer {
+        viewModel.results.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Outcome.Success -> {
                     tv_title_result.visibility = if (it.data.isNotEmpty()) View.VISIBLE else View.GONE
                     searchAdapter?.submitList(it.data)
                 }
-                is Outcome.Failure -> {
+                is Outcome.Error -> {
                     toast(it.error.message)
                 }
             }

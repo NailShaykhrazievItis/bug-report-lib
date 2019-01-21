@@ -8,6 +8,7 @@ import com.itis.android.githubapp.api.service.AuthService
 import com.itis.android.githubapp.api.service.RepoService
 import com.itis.android.githubapp.api.service.SearchService
 import com.itis.android.githubapp.api.service.UserService
+import com.itis.android.githubapp.utils.CoroutineCallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import org.kodein.di.Kodein
@@ -15,7 +16,6 @@ import org.kodein.di.generic.bind
 import org.kodein.di.generic.instance
 import org.kodein.di.generic.singleton
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 fun netModule() = Kodein.Module(name = "netModule") {
@@ -50,5 +50,5 @@ private fun provideRetrofit(client: OkHttpClient): Retrofit =
                 .baseUrl(BuildConfig.API_ENDPOINT)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .build()

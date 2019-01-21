@@ -9,7 +9,6 @@ import com.itis.android.githubapp.model.User
 import com.itis.android.githubapp.model.common.Outcome
 import com.itis.android.githubapp.repository.SearchRepository
 import io.reactivex.rxkotlin.subscribeBy
-import java.util.concurrent.TimeUnit
 
 class SearchViewModel(private val searchRepository: SearchRepository) : ViewModel() {
 
@@ -53,7 +52,7 @@ class SearchViewModel(private val searchRepository: SearchRepository) : ViewMode
                 .subscribeBy(onSuccess = {
                     _repos.value = Outcome.success(it)
                 }, onError = {
-                    _repos.value = Outcome.failure(it)
+                    _repos.value = Outcome.error(it)
                 })
         return _repos
     }
