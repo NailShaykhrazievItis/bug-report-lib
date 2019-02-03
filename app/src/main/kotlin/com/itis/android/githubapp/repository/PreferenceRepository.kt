@@ -11,6 +11,8 @@ class PreferenceRepository(private val sharedPreferences: SharedPreferences) {
     fun getAuthToken(): String = sharedPreferences.getString(KEY_TOKEN, STRING_EMPTY)
             ?: STRING_EMPTY
 
+    fun removeToken() = saveAuthToken(STRING_EMPTY)
+
     companion object {
         const val KEY_TOKEN = "key token"
     }

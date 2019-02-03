@@ -45,7 +45,7 @@ ext {
     glide = "4.8.0"
     gson = "2.8.2"
     kodein = "5.3.0"
-    nav_version = "1.0.0-alpha08"
+    nav_version = "1.0.0-alpha11"
     okhttp = "3.11.0"
     okhttp3downloader = "1.1.0"
     picasso = "2.5.2"
@@ -53,7 +53,7 @@ ext {
     retrofit = "2.4.0"
     room = "1.1.0"
     rxjava = "2.2.0"
-    rxandroid = "2.0.2"
+    rxandroid = "2.1.0"
     reactive_streams = "1.0.0"
     stetho = "1.5.0"
 }
@@ -105,10 +105,10 @@ dependencies {
 
     implementation 'com.github.rahatarmanahmed:circularprogressview:2.5.0'
 
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 }
 
 tasks.withType(Test) {

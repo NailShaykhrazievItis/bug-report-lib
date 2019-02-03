@@ -1,9 +1,12 @@
 package com.itis.android.githubapp.repository
 
 import com.itis.android.githubapp.api.service.RepoService
-import com.itis.android.githubapp.utils.extensions.subscribeSingleOnIoObserveOnUi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
-class RepoRepository(val repoApi: RepoService) {
+class RepoRepository(private val repoService: RepoService) {
 
-    fun getUserRepos() = repoApi.getUserRepos().subscribeSingleOnIoObserveOnUi()
+    suspend fun getUserReposAsync() = withContext(Dispatchers.IO) {
+        repoService.getUserReposAsync()
+    }
 }

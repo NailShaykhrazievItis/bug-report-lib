@@ -15,6 +15,6 @@ interface AuthService {
                   @Body params: JsonObject): Single<Authorization>
 
     @POST("authorizations")
-    fun getAuthorize(@Header("Authorization") authorization: String,
-                     @Body params: JsonObject): Deferred<Authorization>
+    fun getAuthorizeAsync(@Header("Authorization") authorization: String,
+                          @Body params: JsonObject): Deferred<Authorization>
 }

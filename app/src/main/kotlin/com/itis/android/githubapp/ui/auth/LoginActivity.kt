@@ -40,12 +40,10 @@ class LoginActivity : AppCompatActivity(), KodeinAware {
             startActivity<MainActivity>()
             finish()
         })
-        viewModel.error().observe(this, Observer
-        {
+        viewModel.error().observe(this, Observer {
             toast("ERROR: $it")
         })
-        viewModel.isLoading().observe(this, Observer
-        {
+        viewModel.isLoading().observe(this, Observer {
             loginUI?.apply {
                 progress.visibility = if (it) View.VISIBLE else View.GONE
             }

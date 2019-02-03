@@ -10,10 +10,13 @@ import com.itis.android.githubapp.utils.extensions.provideViewModel
 
 class RepoInfoFragment : BaseFragment() {
 
-    private val viewModel: RepoInfoViewModel by provideViewModel()
+    override val viewModel: RepoInfoViewModel by provideViewModel()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             inflater.inflate(R.layout.fragment_repo_info, container, false)
+
+    override fun initObservers() {
+    }
 
     companion object {
 

@@ -14,6 +14,9 @@ interface UserService {
     @GET("user")
     fun getUserByToken(): Single<User>
 
+    @GET("user")
+    fun getUserByTokenAsync(): Deferred<User>
+
     @GET("users/{user}/orgs")
     fun getUserOrgs(@Path("user") user: String): Single<List<User>>
 }

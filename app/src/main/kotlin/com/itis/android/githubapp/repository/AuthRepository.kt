@@ -5,9 +5,11 @@ import com.google.gson.JsonObject
 import com.itis.android.githubapp.BuildConfig
 import com.itis.android.githubapp.api.service.AuthService
 import com.itis.android.githubapp.model.Authorization
-import com.itis.android.githubapp.model.common.Outcome
 import com.itis.android.githubapp.utils.extensions.subscribeSingleOnIoObserveOnUi
 import io.reactivex.Single
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class AuthRepository(private val authService: AuthService) {
 
@@ -17,14 +19,19 @@ class AuthRepository(private val authService: AuthService) {
                 .subscribeSingleOnIoObserveOnUi()
     }
 
-    suspend fun getAuth(login: String, password: String): Outcome<Authorization> {
+//    suspend fun getAuth(login: String, password: String): Outcome<Authorization> = withContext(Dispatchers.IO) {
+//        val authorizationString = createAuthorizationString(login, password)
+//        try {
+//            val auth = authService.getAuthorizeAsync(authorizationString, createAuthorizationParam())
+//            Outcome.success(auth.await())
+//        } catch (throwable: Throwable) {
+//            Outcome.error(throwable)
+//        }
+//    }
+
+    suspend fun getAuthAsync(login: String, password: String): Deferred<Authorization> = withContext(Dispatchers.IO) {
         val authorizationString = createAuthorizationString(login, password)
-        return try {
-            val auth = authService.getAuthorize(authorizationString, createAuthorizationParam())
-            Outcome.success(auth.await())
-        } catch (throwable: Throwable) {
-            Outcome.error(throwable)
-        }
+        authService.getAuthorizeAsync(authorizationString, createAuthorizationParam())
     }
 
     private fun createAuthorizationString(login: String, password: String): String {

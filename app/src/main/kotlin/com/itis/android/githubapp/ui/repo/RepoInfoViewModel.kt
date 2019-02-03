@@ -1,17 +1,14 @@
 package com.itis.android.githubapp.ui.repo
 
-import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.cancel
+import com.itis.android.githubapp.ui.base.BaseViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlin.coroutines.CoroutineContext
 
-class RepoInfoViewModel : ViewModel(), CoroutineScope {
-    override val coroutineContext: CoroutineContext
-        get() = GlobalScope.coroutineContext
+class RepoInfoViewModel : BaseViewModel() {
 
-    override fun onCleared() {
-        super.onCleared()
-        coroutineContext.cancel()
-    }
+    private val job = SupervisorJob()
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
+
 }

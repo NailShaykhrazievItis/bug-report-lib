@@ -3,16 +3,12 @@ package com.itis.android.githubapp.utils
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
-import retrofit2.Call
-import retrofit2.CallAdapter
-import retrofit2.Callback
-import retrofit2.HttpException
-import retrofit2.Response
-import retrofit2.Retrofit
+import retrofit2.*
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
 class CoroutineCallAdapterFactory private constructor() : CallAdapter.Factory() {
+
     companion object {
         @JvmStatic
         @JvmName("create")
@@ -36,8 +32,7 @@ class CoroutineCallAdapterFactory private constructor() : CallAdapter.Factory() 
         val rawDeferredType = getRawType(responseType)
         return if (rawDeferredType == Response::class.java) {
             if (responseType !is ParameterizedType) {
-                throw IllegalStateException(
-                        "Response must be parameterized as Response<Foo> or Response<out Foo>")
+                throw IllegalStateException("Response must be parameterized as Response<Foo> or Response<out Foo>")
             }
             ResponseCallAdapter<Any>(getParameterUpperBound(0, responseType))
         } else {
@@ -53,18 +48,15 @@ class CoroutineCallAdapterFactory private constructor() : CallAdapter.Factory() 
 
         override fun adapt(call: Call<T>): Deferred<T> {
             val deferred = CompletableDeferred<T>()
-
             deferred.invokeOnCompletion {
                 if (deferred.isCancelled && it is CancellationException) {
                     call.cancel()
                 }
             }
-
             call.enqueue(object : Callback<T> {
                 override fun onFailure(call: Call<T>, t: Throwable) {
                     deferred.completeExceptionally(t)
                 }
-
                 override fun onResponse(call: Call<T>, response: Response<T>) {
                     if (response.isSuccessful) {
                         deferred.complete(response.body()!!)
@@ -73,7 +65,6 @@ class CoroutineCallAdapterFactory private constructor() : CallAdapter.Factory() 
                     }
                 }
             })
-
             return deferred
         }
     }
@@ -86,13 +77,11 @@ class CoroutineCallAdapterFactory private constructor() : CallAdapter.Factory() 
 
         override fun adapt(call: Call<T>): Deferred<Response<T>> {
             val deferred = CompletableDeferred<Response<T>>()
-
             deferred.invokeOnCompletion {
                 if (deferred.isCancelled && it is CancellationException) {
                     call.cancel()
                 }
             }
-
             call.enqueue(object : Callback<T> {
                 override fun onFailure(call: Call<T>, t: Throwable) {
                     deferred.completeExceptionally(t)
@@ -102,7 +91,6 @@ class CoroutineCallAdapterFactory private constructor() : CallAdapter.Factory() 
                     deferred.complete(response)
                 }
             })
-
             return deferred
         }
     }

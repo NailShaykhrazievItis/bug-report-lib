@@ -7,21 +7,31 @@ import kotlinx.coroutines.cancelChildren
 
 abstract class BaseViewModel : ViewModel(), CoroutineScope {
 
-    protected lateinit var _loading: MutableLiveData<Boolean>
-    protected lateinit var _error: MutableLiveData<Throwable>
+    private lateinit var mLoading: MutableLiveData<Boolean>
+    private lateinit var mError: MutableLiveData<Throwable>
 
     fun isLoading(): MutableLiveData<Boolean> {
-        if (!::_loading.isInitialized) {
-            _loading = MutableLiveData()
+        if (!::mLoading.isInitialized) {
+            mLoading = MutableLiveData()
         }
-        return _loading
+        return mLoading
     }
 
     fun error(): MutableLiveData<Throwable> {
-        if (!::_error.isInitialized) {
-            _error = MutableLiveData()
+        if (!::mError.isInitialized) {
+            mError = MutableLiveData()
         }
-        return _error
+        return mError
+    }
+
+    suspend fun <T> invokeSuspend(suspendBlock: suspend () -> T): T? = try {
+        mLoading.postValue(true)
+        suspendBlock.invoke()
+    } catch (throwable: Throwable) {
+        mError.postValue(throwable)
+        null
+    } finally {
+        mLoading.postValue(false)
     }
 
     override fun onCleared() {

@@ -2,6 +2,7 @@ package com.itis.android.githubapp.api.service
 
 import com.itis.android.githubapp.model.Repository
 import io.reactivex.Single
+import kotlinx.coroutines.Deferred
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -14,6 +15,12 @@ interface RepoService {
                      @Query("type") type: String? = null,
                      @Query("sort") sort: String? = null,
                      @Query("direction") direction: String? = null): Single<List<Repository>>
+
+    @GET("user/repos")
+    fun getUserReposAsync(@Query("page") page: Int? = null,
+                          @Query("type") type: String? = null,
+                          @Query("sort") sort: String? = null,
+                          @Query("direction") direction: String? = null): Deferred<List<Repository>>
 
     @GET("user/repos")
     fun getUserReposCall(@Query("page") page: Int,

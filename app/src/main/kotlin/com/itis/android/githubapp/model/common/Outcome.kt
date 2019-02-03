@@ -1,12 +1,12 @@
 package com.itis.android.githubapp.model.common
 
-sealed class Outcome<T> {
+sealed class Outcome<out T : Any> {
 
-    data class Success<T>(var data: T) : Outcome<T>()
-    data class Error<T>(val error: Throwable) : Outcome<T>()
+    data class Success<out T : Any>(val data: T) : Outcome<T>()
+    data class Error(val error: Throwable) : Outcome<Nothing>()
 
     companion object {
-        fun <T> success(data: T): Outcome<T> = Success(data)
-        fun <T> error(error: Throwable): Outcome<T> = Error(error)
+        fun <T : Any> success(data: T): Outcome<T> = Success(data)
+        fun error(error: Throwable): Outcome<Nothing> = Error(error)
     }
 }
