@@ -1,31 +1,32 @@
 package com.itis.android.githubapp.ui.search
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.bumptech.glide.Glide
 import com.itis.android.githubapp.R
-import com.itis.android.githubapp.model.common.Outcome
 import com.itis.android.githubapp.ui.adapters.SearchAdapter
-import com.itis.android.githubapp.utils.anko.toast
+import com.itis.android.githubapp.ui.base.BaseFragment
+import com.itis.android.githubapp.ui.repodetails.RepoDetailsActivity
+import com.itis.android.githubapp.utils.constants.STRING_EMPTY
+import com.itis.android.githubapp.utils.constants.TIME_ONE_SECOND
 import com.itis.android.githubapp.utils.extensions.provideViewModel
-import com.itis.android.githubapp.utils.functions.observableFromSearchView
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_search.*
-import org.kodein.di.Kodein
-import org.kodein.di.KodeinAware
-import org.kodein.di.android.x.closestKodein
-import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.channels.consumeEach
 
-class SearchFragment : Fragment(), KodeinAware {
+@ExperimentalCoroutinesApi
+class SearchFragment : BaseFragment() {
 
-    override val kodein: Kodein by closestKodein()
-    private val viewModel: SearchViewModel by provideViewModel()
+    override val viewModel: SearchViewModel by provideViewModel()
+
     private var searchDisposable: Disposable? = null
     private var searchAdapter: SearchAdapter? = null
 
@@ -35,7 +36,6 @@ class SearchFragment : Fragment(), KodeinAware {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecycler()
-        initObservers()
     }
 
     override fun onDestroyView() {
@@ -43,36 +43,60 @@ class SearchFragment : Fragment(), KodeinAware {
         searchDisposable?.dispose()
     }
 
-    private fun initObservers() {
-        viewModel.isLoading().observe(this, Observer {
-            pb_search_progress.visibility = if (it) View.VISIBLE else View.GONE
+    override fun initObservers() {
+        provideLoadingObservers(pb_search_progress)
+        provideErrorObservers(container_search)
+
+        searchWithChannel()
+
+        viewModel.results.observe(viewLifecycleOwner, Observer {
+            tv_title_result.visibility = if (it.isNotEmpty()) View.VISIBLE else View.GONE
+            searchAdapter?.submitList(it)
         })
-        searchDisposable = observableFromSearchView(sv_main)
-                .debounce(1, TimeUnit.SECONDS)
-                .distinctUntilChanged()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    viewModel.search(it)
-                }
-        viewModel.results.observe(this, Observer {
-            when (it) {
-                is Outcome.Success -> {
-                    tv_title_result.visibility = if (it.data.isNotEmpty()) View.VISIBLE else View.GONE
-                    searchAdapter?.submitList(it.data)
-                }
-                is Outcome.Failure -> {
-                    toast(it.error.message)
-                }
+        initNavigateObservers()
+    }
+
+
+    private fun searchWithChannel() {
+        val job = Job()
+        val scope = CoroutineScope(Dispatchers.Main + job)
+        val broadcast = ConflatedBroadcastChannel<String>()
+        scope.launch {
+            broadcast.consumeEach {
+                delay(TIME_ONE_SECOND)
+                viewModel.search(it)
+            }
+        }
+        sv_main.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                broadcast.offer(newText ?: STRING_EMPTY)
+                return true
             }
         })
     }
 
     private fun initRecycler() {
-        searchAdapter = SearchAdapter(Glide.with(this))
+        searchAdapter = SearchAdapter(Glide.with(this)) { repo ->
+            viewModel.onItemClick(repo.name)
+        }
         activity?.let {
             val divider = DividerItemDecoration(it, DividerItemDecoration.VERTICAL)
             rv_search.addItemDecoration(divider)
         }
         rv_search.adapter = searchAdapter
+    }
+
+    private fun initNavigateObservers() {
+        viewModel.navigateToReposDetails.observe(viewLifecycleOwner, Observer {
+            activity?.run {
+                val intent = Intent(this, RepoDetailsActivity::class.java)
+                intent.putExtra(RepoDetailsActivity.EXTRA_REPO_NAME, it)
+                startActivity(intent)
+            }
+        })
     }
 }

@@ -7,6 +7,7 @@
         <item name="colorPrimaryDark">@color/color_primary_dark</item>
         <item name="colorAccent">@color/color_accent</item>
         <item name="colorButtonNormal">@color/color_accent</item>
+        <item name="colorControlNormal">@color/icons</item>
 
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -31,18 +32,20 @@
     <style name="ProfileOptionsStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">8dp</item>
-        <item name="android:paddingTop">4dp</item>
-        <item name="android:paddingBottom">4dp</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/text_secondary</item>
         <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/text_primary</item>
     </style>
 
     <style name="RepoItemProperties">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:layout_marginTop">2dp</item>
         <item name="android:textColor">@color/text_secondary</item>
         <item name="android:textSize">14sp</item>
         <item name="android:drawablePadding">2dp</item>
@@ -53,9 +56,12 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/white_80</item>
         <item name="android:elevation">4dp</item>
-        <item name="contentPadding">16dp</item>
         <item name="cardBackgroundColor">@color/white_80</item>
         <item name="cardCornerRadius">4dp</item>
+    </style>
+
+    <style name="ActionBar" parent="AppTheme">
+        <item name="titleTextColor">@color/icons</item>
     </style>
 
 </resources>

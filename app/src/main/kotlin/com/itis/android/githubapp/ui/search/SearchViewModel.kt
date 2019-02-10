@@ -3,58 +3,67 @@ package com.itis.android.githubapp.ui.search
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
 import com.itis.android.githubapp.model.Repository
 import com.itis.android.githubapp.model.User
-import com.itis.android.githubapp.model.common.Outcome
 import com.itis.android.githubapp.repository.SearchRepository
-import io.reactivex.rxkotlin.subscribeBy
-import java.util.concurrent.TimeUnit
+import com.itis.android.githubapp.ui.base.BaseViewModel
+import com.itis.android.githubapp.utils.vm.SingleLiveEvent
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
-class SearchViewModel(private val searchRepository: SearchRepository) : ViewModel() {
+class SearchViewModel(private val searchRepository: SearchRepository) : BaseViewModel() {
 
-    private lateinit var _users: MutableLiveData<List<User>>
-    private val _repos: MutableLiveData<Outcome<List<Repository>>> by lazy { MutableLiveData<Outcome<List<Repository>>>() }
-    private lateinit var _loading: MutableLiveData<Boolean>
-    private val _query: MutableLiveData<String> by lazy { MutableLiveData<String>() }
+    private val job = SupervisorJob()
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
 
-    fun search(input: String) {
-        if (input == _query.value) {
-            return
-        }
-        _query.value = input
-    }
+    private val mUsers: MutableLiveData<List<User>> by lazy { MutableLiveData<List<User>>() }
+    private val mRepos: MutableLiveData<List<Repository>> by lazy { MutableLiveData<List<Repository>>() }
 
-    val results: LiveData<Outcome<List<Repository>>> = Transformations
-            .switchMap(_query) { search ->
+    private val mQuery: MutableLiveData<String> by lazy { MutableLiveData<String>() }
+    private val mItemClick = SingleLiveEvent<String>()
+
+    val navigateToReposDetails: SingleLiveEvent<String>
+        get() = mItemClick
+
+    val results: LiveData<List<Repository>> = Transformations
+            .switchMap(mQuery) { search ->
                 findRepos(search)
-//                if (search.isNullOrBlank()) {
-////                    AbsentLiveData.create()
-//                } else {
-//                    findRepos(search)
-//                }
             }
 
-    fun isLoading(): MutableLiveData<Boolean> {
-        if (!::_loading.isInitialized) {
-            _loading = MutableLiveData()
+    fun onItemClick(repoName: String) {
+        mItemClick.value = repoName
+    }
+
+    fun search(input: String) {
+        if (input == mQuery.value) {
+            return
         }
-        return _loading
+        mQuery.value = input
     }
 
-    fun findUsers(): MutableLiveData<List<User>> {
-        return _users
+    private fun findRepos(query: String): MutableLiveData<List<Repository>> {
+        launch {
+            invokeSuspend {
+                val res = searchRepository.searchReposAsync(query)
+                mRepos.postValue(res)
+            }
+
+        }
+        return mRepos
     }
 
-    private fun findRepos(query: String): MutableLiveData<Outcome<List<Repository>>> {
-        searchRepository.searchRepos(query)
-                .doOnSubscribe { _loading.value = true }
-                .doAfterTerminate { _loading.value = false }
-                .subscribeBy(onSuccess = {
-                    _repos.value = Outcome.success(it)
-                }, onError = {
-                    _repos.value = Outcome.failure(it)
-                })
-        return _repos
-    }
+//    private fun findRepos(query: String): MutableLiveData<Outcome<List<Repository>>> {
+//        searchRepository.searchRepos(query)
+//                .doOnSubscribe { mLoading.value = true }
+//                .doAfterTerminate { mLoading.value = false }
+//                .subscribeBy(onSuccess = {
+//                    mRepos.value = Outcome.success(it)
+//                }, onError = {
+//                    mRepos.value = Outcome.error(it)
+//                })
+//        return mRepos
+//    }
 }

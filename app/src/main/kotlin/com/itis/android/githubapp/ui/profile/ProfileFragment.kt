@@ -1,27 +1,26 @@
 package com.itis.android.githubapp.ui.profile
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.itis.android.githubapp.R
-import com.itis.android.githubapp.model.common.Outcome
 import com.itis.android.githubapp.ui.adapters.ReposAdapter
+import com.itis.android.githubapp.ui.auth.LoginActivity
+import com.itis.android.githubapp.ui.base.BaseFragment
+import com.itis.android.githubapp.ui.repodetails.RepoDetailsActivity
+import com.itis.android.githubapp.ui.repodetails.RepoDetailsActivity.Companion.EXTRA_REPO_NAME
 import com.itis.android.githubapp.utils.extensions.provideViewModel
 import kotlinx.android.synthetic.main.fragment_profile.*
-import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
-import org.kodein.di.android.x.closestKodein
 
-class ProfileFragment : Fragment(), KodeinAware {
+class ProfileFragment : BaseFragment(), KodeinAware {
 
-    override val kodein: Kodein by closestKodein()
+    override val viewModel: ProfileViewModel by provideViewModel()
 
-    private val viewModel: ProfileViewModel by provideViewModel()
     private var adapter: ReposAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -31,44 +30,53 @@ class ProfileFragment : Fragment(), KodeinAware {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
-        initObservers()
+        initListeners()
+    }
+
+    override fun initObservers() {
+        provideLoadingObservers(progress)
+        provideErrorObservers(container_profile)
+        viewModel.getUser().observe(viewLifecycleOwner, Observer {
+            tv_username.text = it.login
+            tv_name.text = it.name
+            tv_bio.text = it.bio
+            tv_company.text = it.company
+            tv_location.text = it.location
+            Glide.with(this)
+                    .load(it.avatarUrl)
+                    .into(iv_avatar)
+        })
+        viewModel.getRepos().observe(viewLifecycleOwner, Observer {
+            adapter?.submitList(it)
+        })
+        initNavigateObservers()
+    }
+
+    private fun initNavigateObservers() {
+        viewModel.navigateToAuth.observe(viewLifecycleOwner, Observer {
+            activity?.run {
+                startActivity(Intent(this, LoginActivity::class.java))
+                finish()
+            }
+        })
     }
 
     private fun initAdapter() {
-        adapter = ReposAdapter()
+        adapter = ReposAdapter { repo ->
+            activity?.let {
+                val intent = Intent(it, RepoDetailsActivity::class.java)
+                intent.putExtra(EXTRA_REPO_NAME, repo.name)
+                startActivity(intent)
+            }
+        }
         rv_repo.adapter = adapter
     }
 
-    private fun initObservers() {
-        viewModel.isLoading().observe(this, Observer {
-            progress.visibility = if (it) View.VISIBLE else View.GONE
-        })
-        viewModel.getUser().observe(this, Observer {
-            when (it) {
-                is Outcome.Success -> {
-                    tv_username.text = it.data.login
-                    tv_name.text = it.data.name
-                    tv_bio.text = it.data.bio
-                    tv_company.text = it.data.company
-                    tv_location.text = it.data.location
-                    Glide.with(this)
-                            .load(it.data.avatarUrl)
-                            .into(iv_avatar)
-                }
-                is Outcome.Failure -> {
-
-                }
-            }
-        })
-        viewModel.getRepos().observe(this, Observer {
-            when (it) {
-                is Outcome.Success -> {
-                    adapter?.submitList(it.data)
-                }
-                is Outcome.Failure -> {
-
-                }
-            }
-        })
+    private fun initListeners() {
+        btn_sign_out.setOnClickListener { viewModel.signOutClick() }
+        tv_followers.setOnClickListener { }
+        tv_following.setOnClickListener { }
+        tv_feed.setOnClickListener { }
+        tv_stars.setOnClickListener { }
     }
 }

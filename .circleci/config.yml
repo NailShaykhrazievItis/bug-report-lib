@@ -51,7 +51,7 @@ jobs:
       - *save_cache
       - *persist_release_workspace
 
-  check_style:
+  detekt:
     <<: *android_config
     steps:
       - checkout
@@ -61,11 +61,27 @@ jobs:
           name: Chmod permissions
           command: sudo chmod +x ./gradlew
       - run:
-          name: Run Checkstyle
-          command: ./gradlew checkstyle pmd detektCheck lintProductionRelease
+          name: Run Detekt Checkstyle
+          command: ./gradlew detekt
       - store_artifacts:
           path: app/build/reports/
           destination: /reports/
+
+  pmd:
+    <<: *android_config
+    steps:
+    - checkout
+    - *attach_release_workspace
+    - *restore_cache
+    - run:
+        name: Chmod permissions
+        command: sudo chmod +x ./gradlew
+    - run:
+        name: Run PMD Checkstyle
+        command: ./gradlew pmd
+    - store_artifacts:
+        path: app/build/reports/
+        destination: /reports/
 
   test_unit:
       <<: *android_config
@@ -78,7 +94,7 @@ jobs:
            command: sudo chmod +x ./gradlew
         - run:
             name: Run unit tests
-            command: ./gradlew testProductionReleaseUnitTest -no-daemon -Pkotlin.incremental=false --max-workers=2
+            command: ./gradlew test -no-daemon -Pkotlin.incremental=false --max-workers=2
         - store_artifacts:
             path: app/build/reports/
             destination: /reports/
@@ -94,9 +110,15 @@ workflows:
           filters:
             tags:
               only: /^.*/
-      - check_style:
+      - detekt:
           requires:
               - build
+          filters:
+            tags:
+              only: /^.*/
+      - pmd:
+          requires:
+          - build
           filters:
             tags:
               only: /^.*/

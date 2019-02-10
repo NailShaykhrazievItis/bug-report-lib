@@ -1,65 +1,68 @@
 package com.itis.android.githubapp.ui.profile
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.itis.android.githubapp.model.Repository
 import com.itis.android.githubapp.model.User
-import com.itis.android.githubapp.model.common.Outcome
+import com.itis.android.githubapp.repository.PreferenceRepository
 import com.itis.android.githubapp.repository.RepoRepository
 import com.itis.android.githubapp.repository.UserRepository
-import io.reactivex.rxkotlin.subscribeBy
+import com.itis.android.githubapp.ui.base.BaseViewModel
+import com.itis.android.githubapp.utils.vm.SingleLiveEvent
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
 class ProfileViewModel(
         private val userRepository: UserRepository,
-        private val repoRepository: RepoRepository
-) : ViewModel() {
+        private val repoRepository: RepoRepository,
+        private val preferenceRepository: PreferenceRepository
+) : BaseViewModel() {
 
-    private lateinit var _user: MutableLiveData<Outcome<User>>
-    private lateinit var _repos: MutableLiveData<Outcome<List<Repository>>>
-    private lateinit var _loading: MutableLiveData<Boolean>
+    private val job = SupervisorJob()
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
 
-    fun getUser(): MutableLiveData<Outcome<User>> {
-        if (!::_user.isInitialized) {
-            _user = MutableLiveData()
+    private lateinit var mUser: MutableLiveData<User>
+    private lateinit var mRepos: MutableLiveData<List<Repository>>
+    private val mSignOut = SingleLiveEvent<Any>()
+
+    val navigateToAuth: LiveData<Any?>
+        get() = mSignOut
+
+    fun getUser(): MutableLiveData<User> {
+        if (!::mUser.isInitialized) {
+            mUser = MutableLiveData()
             fetchUserData()
         }
-        return _user
+        return mUser
     }
 
-    fun getRepos(): MutableLiveData<Outcome<List<Repository>>> {
-        if (!::_repos.isInitialized) {
-            _repos = MutableLiveData()
+    fun getRepos(): MutableLiveData<List<Repository>> {
+        if (!::mRepos.isInitialized) {
+            mRepos = MutableLiveData()
             fetchRepositories()
         }
-        return _repos
+        return mRepos
     }
 
-    fun isLoading(): MutableLiveData<Boolean> {
-        if (!::_loading.isInitialized) {
-            _loading = MutableLiveData()
+    fun signOutClick() {
+        preferenceRepository.removeToken()
+        mSignOut.call()
+    }
+
+    private fun fetchUserData() = launch {
+        invokeSuspend {
+            val result = userRepository.getUserByTokenAsync()
+            mUser.postValue(result.await())
         }
-        return _loading
     }
 
-    private fun fetchUserData() {
-        userRepository.getUserByToken()
-                .doOnSubscribe { _loading.value = true }
-                .doAfterTerminate { _loading.value = false }
-                .subscribeBy(onSuccess = {
-                    _user.value = Outcome.success(it)
-                }, onError = {
-                    _user.value = Outcome.failure(it)
-                })
-    }
-
-    private fun fetchRepositories() {
-        repoRepository.getUserRepos()
-                .doOnSubscribe { _loading.value = true }
-                .doAfterTerminate { _loading.value = false }
-                .subscribeBy(onSuccess = {
-                    _repos.value = Outcome.success(it)
-                }, onError = {
-                    _repos.value = Outcome.failure(it)
-                })
+    private fun fetchRepositories() = launch {
+        invokeSuspend {
+            val result = repoRepository.getUserReposAsync()
+            mRepos.postValue(result.await())
+        }
     }
 }

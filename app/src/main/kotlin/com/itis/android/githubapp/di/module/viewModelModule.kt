@@ -19,6 +19,6 @@ fun viewModelModule() = Kodein.Module(name = "viewModelModule") {
 
     bindViewModel<LoginViewModel>() with provider { LoginViewModel(instance(), instance()) }
     bindViewModel<SplashScreenViewModel>() with provider { SplashScreenViewModel(instance()) }
-    bindViewModel<ProfileViewModel>() with provider { ProfileViewModel(instance(), instance()) }
+    bindViewModel<ProfileViewModel>() with provider { ProfileViewModel(instance(), instance(), instance()) }
     bindViewModel<SearchViewModel>() with provider { SearchViewModel(instance()) }
 }

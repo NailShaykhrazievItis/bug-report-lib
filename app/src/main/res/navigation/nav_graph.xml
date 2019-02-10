@@ -8,7 +8,11 @@
         android:id="@+id/navigation_search"
         android:name="com.itis.android.githubapp.ui.search.SearchFragment"
         android:label="SearchFragment"
-        tools:layout="@layout/fragment_search"/>
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_navigation_search_to_repoDetailsActivity"
+            app:destination="@id/repoDetailsActivity" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_home"
@@ -20,13 +24,13 @@
         android:name="com.itis.android.githubapp.ui.profile.ProfileFragment"
         android:label="ProfileFragment">
         <action
-            android:id="@+id/action_navigation_profile_to_navigation_repo"
-            app:destination="@id/navigation_repo" />
+            android:id="@+id/action_navigation_profile_to_repoDetailsActivity"
+            app:destination="@id/repoDetailsActivity" />
     </fragment>
 
-    <fragment
-        android:id="@+id/navigation_repo"
-        android:name="com.itis.android.githubapp.ui.repo.RepoFragment"
-        android:label="RepoFragment" />
+    <activity
+        android:id="@+id/repoDetailsActivity"
+        android:name="com.itis.android.githubapp.ui.repodetails.RepoDetailsActivity"
+        android:label="RepoDetailsActivity" />
 
 </navigation>

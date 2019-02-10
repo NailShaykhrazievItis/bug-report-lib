@@ -11,7 +11,7 @@ import java.util.*
 
 class RepoHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(repo: Repository) {
+    fun bind(repo: Repository, repoClickLambda: (Repository) -> Unit) {
         tv_name.text = repo.name
         if (repo.description.isNullOrEmpty()) {
             tv_desc.visibility = View.GONE
@@ -21,8 +21,15 @@ class RepoHolder(override val containerView: View) : RecyclerView.ViewHolder(con
         }
         tv_fork.text = repo.forksCount.toString()
         tv_stars.text = repo.stargazersCount.toString()
-        tv_language.text = repo.language
-        tv_last_update.text =
-                SimpleDateFormat(DEFAULT_DATE_FORMAT, Locale.getDefault()).format(repo.updatedAt)
+        if (repo.language.isNullOrBlank()) {
+            tv_language.visibility = View.GONE
+        } else {
+            tv_language.text = repo.language
+            tv_language.visibility = View.VISIBLE
+        }
+        tv_last_update.text = SimpleDateFormat(DEFAULT_DATE_FORMAT, Locale.getDefault()).format(repo.updatedAt)
+        containerView.setOnClickListener {
+            repoClickLambda(repo)
+        }
     }
 }
