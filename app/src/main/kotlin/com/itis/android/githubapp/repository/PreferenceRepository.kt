@@ -1,19 +1,10 @@
 package com.itis.android.githubapp.repository
 
-import android.content.SharedPreferences
-import com.itis.android.githubapp.utils.constants.STRING_EMPTY
+interface PreferenceRepository {
 
-class PreferenceRepository(private val sharedPreferences: SharedPreferences) {
+    fun saveAuthToken(token: String): Boolean
 
-    fun saveAuthToken(token: String) =
-            sharedPreferences.edit().putString(KEY_TOKEN, token).commit()
+    fun getAuthToken(): String
 
-    fun getAuthToken(): String = sharedPreferences.getString(KEY_TOKEN, STRING_EMPTY)
-            ?: STRING_EMPTY
-
-    fun removeToken() = saveAuthToken(STRING_EMPTY)
-
-    companion object {
-        const val KEY_TOKEN = "key token"
-    }
+    fun removeToken(): Boolean
 }

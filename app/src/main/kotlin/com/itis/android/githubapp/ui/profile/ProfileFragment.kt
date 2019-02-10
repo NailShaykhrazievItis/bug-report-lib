@@ -49,6 +49,10 @@ class ProfileFragment : BaseFragment(), KodeinAware {
         viewModel.getRepos().observe(viewLifecycleOwner, Observer {
             adapter?.submitList(it)
         })
+        initNavigateObservers()
+    }
+
+    private fun initNavigateObservers() {
         viewModel.navigateToAuth.observe(viewLifecycleOwner, Observer {
             activity?.run {
                 startActivity(Intent(this, LoginActivity::class.java))

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/container_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -221,5 +221,5 @@
             android:layout_gravity="center"
             android:visibility="gone"
             tools:visibility="visible" />
-    </FrameLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.core.widget.NestedScrollView>

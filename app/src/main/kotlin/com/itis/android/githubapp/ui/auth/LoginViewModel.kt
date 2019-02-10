@@ -5,6 +5,7 @@ import com.itis.android.githubapp.repository.AuthRepository
 import com.itis.android.githubapp.repository.PreferenceRepository
 import com.itis.android.githubapp.ui.base.BaseViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
@@ -27,7 +28,7 @@ class LoginViewModel(
         return mResult
     }
 
-    fun auth(login: String, password: String) = launch {
+    fun auth(login: String, password: String): Job = this.launch {
         invokeSuspend {
             val result = authRepository.getAuthAsync(login, password)
             result.await().token.let {

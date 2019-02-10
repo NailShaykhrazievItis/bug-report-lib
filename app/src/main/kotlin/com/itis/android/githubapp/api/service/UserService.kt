@@ -12,9 +12,6 @@ interface UserService {
     fun getUser(@Path("login") login: String): Single<User>
 
     @GET("user")
-    fun getUserByToken(): Single<User>
-
-    @GET("user")
     fun getUserByTokenAsync(): Deferred<User>
 
     @GET("users/{user}/orgs")

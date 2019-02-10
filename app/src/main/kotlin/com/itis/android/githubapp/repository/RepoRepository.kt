@@ -1,12 +1,9 @@
 package com.itis.android.githubapp.repository
 
-import com.itis.android.githubapp.api.service.RepoService
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import com.itis.android.githubapp.model.Repository
+import kotlinx.coroutines.Deferred
 
-class RepoRepository(private val repoService: RepoService) {
+interface RepoRepository {
 
-    suspend fun getUserReposAsync() = withContext(Dispatchers.IO) {
-        repoService.getUserReposAsync()
-    }
+    suspend fun getUserReposAsync(): Deferred<List<Repository>>
 }

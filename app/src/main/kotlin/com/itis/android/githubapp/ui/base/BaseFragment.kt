@@ -31,7 +31,7 @@ abstract class BaseFragment : Fragment(), KodeinAware {
 
     protected fun provideErrorObservers(view: View) {
         viewModel.error().observe(viewLifecycleOwner, Observer {
-            Snackbar.make(view, it.message ?: ERROR_UNDEFAUIND, Snackbar.LENGTH_SHORT)
+            Snackbar.make(view, it.message ?: ERROR_UNDEFAUIND, Snackbar.LENGTH_SHORT).show()
         })
     }
 }

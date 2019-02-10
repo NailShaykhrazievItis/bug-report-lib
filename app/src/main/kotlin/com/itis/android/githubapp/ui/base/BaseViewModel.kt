@@ -28,10 +28,10 @@ abstract class BaseViewModel : ViewModel(), CoroutineScope {
         mLoading.postValue(true)
         suspendBlock.invoke()
     } catch (throwable: Throwable) {
-        mError.postValue(throwable)
+        mError?.postValue(throwable)
         null
     } finally {
-        mLoading.postValue(false)
+        mLoading?.postValue(false)
     }
 
     override fun onCleared() {
