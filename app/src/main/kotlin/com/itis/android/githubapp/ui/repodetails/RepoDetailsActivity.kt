@@ -10,7 +10,6 @@ import com.itis.android.githubapp.ui.base.BaseViewPagerAdapter
 import com.itis.android.githubapp.ui.repo.RepoInfoFragment
 import kotlinx.android.synthetic.main.activity_repo_details.*
 
-
 class RepoDetailsActivity : AppCompatActivity() {
 
     private var adapter: RepoViewPagerAdapter? = null

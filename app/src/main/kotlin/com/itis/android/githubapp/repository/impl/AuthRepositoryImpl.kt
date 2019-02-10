@@ -21,10 +21,11 @@ class AuthRepositoryImpl(private val authService: AuthService) : AuthRepository 
                 .subscribeSingleOnIoObserveOnUi()
     }
 
-    override suspend fun getAuthAsync(login: String, password: String): Deferred<Authorization> = withContext(Dispatchers.IO) {
-        val authorizationString = createAuthorizationString(login, password)
-        authService.authorizeAsync(authorizationString, createAuthorizationParam())
-    }
+    override suspend fun getAuthAsync(login: String, password: String): Deferred<Authorization> =
+            withContext(Dispatchers.IO) {
+                val authorizationString = createAuthorizationString(login, password)
+                authService.authorizeAsync(authorizationString, createAuthorizationParam())
+            }
 
     @VisibleForTesting
     fun createAuthorizationString(login: String, password: String): String {

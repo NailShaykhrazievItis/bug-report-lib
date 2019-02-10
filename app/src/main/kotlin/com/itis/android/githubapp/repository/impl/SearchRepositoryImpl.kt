@@ -18,9 +18,6 @@ class SearchRepositoryImpl(private val searchApi: SearchService) : SearchReposit
 
     override suspend fun searchReposAsync(query: String): List<Repository> = withContext(Dispatchers.IO) {
         searchApi.searchReposAsync(query).await().items
-//        async {
-//            res.await().items
-//        }
     }
 
     fun searchUsers(query: String): Single<List<User>> =

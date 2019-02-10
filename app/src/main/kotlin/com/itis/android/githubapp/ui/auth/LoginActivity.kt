@@ -13,6 +13,8 @@ import com.itis.android.githubapp.R
 import com.itis.android.githubapp.ui.MainActivity
 import com.itis.android.githubapp.utils.anko.buttonX
 import com.itis.android.githubapp.utils.anko.textInput
+import com.itis.android.githubapp.utils.constants.NUMBER_SIXTEEN
+import com.itis.android.githubapp.utils.constants.NUMBER_TWENTY_FOUR
 import com.itis.android.githubapp.utils.extensions.provideViewModel
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk27.coroutines.onClick
@@ -59,15 +61,15 @@ class LoginActivity : AppCompatActivity(), KodeinAware {
         override fun createView(ui: AnkoContext<LoginActivity>): View = with(ui) {
             frameLayout {
                 verticalLayout {
-                    padding = dip(24)
+                    padding = dip(NUMBER_TWENTY_FOUR)
                     imageView(R.mipmap.ic_launcher_foreground).lparams {
-                        margin = dip(16)
+                        margin = dip(NUMBER_SIXTEEN)
                         gravity = Gravity.CENTER
                     }
                     val tiLogin = textInput {
                         editText {
                             hintResource = R.string.login
-                            textSize = 16f
+                            textSize = NUMBER_SIXTEEN.toFloat()
                             setText("NailShaykhrazievItis")
                         }
                     }
@@ -75,10 +77,10 @@ class LoginActivity : AppCompatActivity(), KodeinAware {
                         editText {
                             hintResource = R.string.password
                             inputType = TYPE_CLASS_TEXT or TYPE_TEXT_VARIATION_PASSWORD
-                            textSize = 16f
+                            textSize = NUMBER_SIXTEEN.toFloat()
                         }
                     }.lparams(width = matchParent, height = wrapContent) {
-                        topMargin = dip(16)
+                        topMargin = dip(NUMBER_SIXTEEN)
                     }
                     buttonX(theme = R.style.AppTheme) {
                         setText(R.string.login)
@@ -87,7 +89,7 @@ class LoginActivity : AppCompatActivity(), KodeinAware {
                             ui.owner.login(tiLogin.editText?.text.toString(), tiPassword.editText?.text.toString())
                         }
                     }.lparams(width = matchParent, height = wrapContent) {
-                        topMargin = dip(24)
+                        topMargin = dip(NUMBER_TWENTY_FOUR)
                     }
                 }
                 progress = progressBar {

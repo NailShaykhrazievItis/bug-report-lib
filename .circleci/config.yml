@@ -62,7 +62,7 @@ jobs:
           command: sudo chmod +x ./gradlew
       - run:
           name: Run Checkstyle
-          command: ./gradlew checkstyle pmd detektCheck lintProductionRelease
+          command: ./gradlew pmd detekt
       - store_artifacts:
           path: app/build/reports/
           destination: /reports/
