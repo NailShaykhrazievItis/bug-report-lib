@@ -8,7 +8,7 @@ import com.itis.android.githubapp.api.service.AuthService
 import com.itis.android.githubapp.api.service.RepoService
 import com.itis.android.githubapp.api.service.SearchService
 import com.itis.android.githubapp.api.service.UserService
-import com.itis.android.githubapp.utils.CoroutineCallAdapterFactory
+import com.itis.android.githubapp.utils.helpers.CoroutineCallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import org.kodein.di.Kodein

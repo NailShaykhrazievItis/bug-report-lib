@@ -21,12 +21,9 @@ class SearchAdapter(
         }
 ) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_search_repo, parent, false)
-        return SearchHolder(view, glideManager)
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchHolder =
+            SearchHolder(LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_search_repo, parent, false), glideManager)
 
-    override fun onBindViewHolder(holder: SearchHolder, position: Int) {
-        holder.bind(getItem(position), repoClickLambda)
-    }
+    override fun onBindViewHolder(holder: SearchHolder, position: Int) = holder.bind(getItem(position), repoClickLambda)
 }
