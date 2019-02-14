@@ -1,11 +1,11 @@
 package com.itis.android.githubapp.repository
 
 import com.itis.android.githubapp.model.Repository
-import io.reactivex.Single
+import com.itis.android.githubapp.model.User
 
 interface SearchRepository {
 
-    fun searchRepos(query: String): Single<List<Repository>>
+    suspend fun searchUsers(query: String): List<User>
 
     suspend fun searchReposAsync(query: String): List<Repository>
 }

@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.bumptech.glide.Glide
@@ -13,10 +12,9 @@ import com.itis.android.githubapp.R
 import com.itis.android.githubapp.ui.adapters.SearchAdapter
 import com.itis.android.githubapp.ui.base.BaseFragment
 import com.itis.android.githubapp.ui.repodetails.RepoDetailsActivity
-import com.itis.android.githubapp.utils.constants.STRING_EMPTY
 import com.itis.android.githubapp.utils.constants.TIME_ONE_SECOND
 import com.itis.android.githubapp.utils.extensions.provideViewModel
-import io.reactivex.disposables.Disposable
+import com.itis.android.githubapp.utils.functions.channelFromSearchView
 import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
@@ -27,7 +25,9 @@ class SearchFragment : BaseFragment() {
 
     override val viewModel: SearchViewModel by provideViewModel()
 
-    private var searchDisposable: Disposable? = null
+    private val job = Job()
+    private val scope = CoroutineScope(Dispatchers.Main + job)
+
     private var searchAdapter: SearchAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
@@ -40,7 +40,7 @@ class SearchFragment : BaseFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        searchDisposable?.dispose()
+        scope.coroutineContext.cancelChildren()
     }
 
     override fun initObservers() {
@@ -50,6 +50,7 @@ class SearchFragment : BaseFragment() {
         searchWithChannel()
 
         viewModel.results.observe(viewLifecycleOwner, Observer {
+            tv_no_results.visibility = if (it.isNotEmpty()) View.GONE else View.VISIBLE
             tv_title_result.visibility = if (it.isNotEmpty()) View.VISIBLE else View.GONE
             searchAdapter?.submitList(it)
         })
@@ -58,8 +59,6 @@ class SearchFragment : BaseFragment() {
 
 
     private fun searchWithChannel() {
-        val job = Job()
-        val scope = CoroutineScope(Dispatchers.Main + job)
         val broadcast = ConflatedBroadcastChannel<String>()
         scope.launch {
             broadcast.consumeEach {
@@ -67,16 +66,7 @@ class SearchFragment : BaseFragment() {
                 viewModel.search(it)
             }
         }
-        sv_main.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                broadcast.offer(newText ?: STRING_EMPTY)
-                return true
-            }
-        })
+        channelFromSearchView(sv_main, broadcast)
     }
 
     private fun initRecycler() {

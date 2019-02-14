@@ -1,4 +1,4 @@
-package com.itis.android.githubapp.utils
+package com.itis.android.githubapp.utils.helpers
 
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred

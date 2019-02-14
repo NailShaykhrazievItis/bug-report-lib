@@ -25,4 +25,5 @@
     <string name="results">Results</string>
     <!--Repo Details-->
     <string name="info">Info</string>
+    <string name="no_search_results">No search results</string>
 </resources>

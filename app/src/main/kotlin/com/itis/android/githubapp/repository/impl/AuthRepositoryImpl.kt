@@ -7,19 +7,11 @@ import com.itis.android.githubapp.BuildConfig
 import com.itis.android.githubapp.api.service.AuthService
 import com.itis.android.githubapp.model.Authorization
 import com.itis.android.githubapp.repository.AuthRepository
-import com.itis.android.githubapp.utils.extensions.subscribeSingleOnIoObserveOnUi
-import io.reactivex.Single
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class AuthRepositoryImpl(private val authService: AuthService) : AuthRepository {
-
-    fun auth(login: String, password: String): Single<Authorization> {
-        val authorizationString = createAuthorizationString(login, password)
-        return authService.authorize(authorizationString, createAuthorizationParam())
-                .subscribeSingleOnIoObserveOnUi()
-    }
 
     override suspend fun getAuthAsync(login: String, password: String): Deferred<Authorization> =
             withContext(Dispatchers.IO) {

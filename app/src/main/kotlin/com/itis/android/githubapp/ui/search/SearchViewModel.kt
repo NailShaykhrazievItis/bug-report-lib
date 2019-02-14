@@ -54,16 +54,4 @@ class SearchViewModel(private val searchRepository: SearchRepository) : BaseView
         }
         return mRepos
     }
-
-//    private fun findRepos(query: String): MutableLiveData<Outcome<List<Repository>>> {
-//        searchRepository.searchRepos(query)
-//                .doOnSubscribe { mLoading.value = true }
-//                .doAfterTerminate { mLoading.value = false }
-//                .subscribeBy(onSuccess = {
-//                    mRepos.value = Outcome.success(it)
-//                }, onError = {
-//                    mRepos.value = Outcome.error(it)
-//                })
-//        return mRepos
-//    }
 }
