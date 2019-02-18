@@ -75,7 +75,7 @@ complexity:
     ignoreDefaultParameters: true
   LongMethod:
     active: true
-    threshold: 20
+    threshold: 25
   LargeClass:
     active: true
     threshold: 500
