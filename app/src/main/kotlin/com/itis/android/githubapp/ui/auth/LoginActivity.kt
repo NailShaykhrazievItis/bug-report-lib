@@ -58,6 +58,7 @@ class LoginActivity : AppCompatActivity(), KodeinAware {
 
         lateinit var progress: ProgressBar
 
+        @Suppress("LongMethod")
         override fun createView(ui: AnkoContext<LoginActivity>): View = with(ui) {
             frameLayout {
                 verticalLayout {
