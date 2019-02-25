@@ -49,7 +49,7 @@ ext {
     kodein = "5.3.0"
     kotlin_test = "1.1.51"
     mockk = "1.9"
-    nav_version = "1.0.0-beta02"
+    nav_version = "1.0.0-rc01"
     okhttp = "3.11.0"
     okhttp3downloader = "1.1.0"
     picasso = "2.5.2"
