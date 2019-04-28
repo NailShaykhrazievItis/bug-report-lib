@@ -27,12 +27,12 @@ abstract class BaseViewModel : ViewModel(), CoroutineScope {
     @Suppress("TooGenericExceptionCaught")
     suspend fun <T> invokeSuspend(suspendBlock: suspend () -> T): T? = try {
         mLoading.postValue(true)
-        suspendBlock.invoke()
+        suspendBlock()
     } catch (throwable: Throwable) {
-        mError?.postValue(throwable)
+        mError.postValue(throwable)
         null
     } finally {
-        mLoading?.postValue(false)
+        mLoading.postValue(false)
     }
 
     override fun onCleared() {

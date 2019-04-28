@@ -2,6 +2,7 @@ package com.itis.android.githubapp.ui.search
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +13,6 @@ import com.itis.android.githubapp.R
 import com.itis.android.githubapp.ui.adapters.SearchAdapter
 import com.itis.android.githubapp.ui.base.BaseFragment
 import com.itis.android.githubapp.ui.repodetails.RepoDetailsActivity
-import com.itis.android.githubapp.utils.constants.TIME_ONE_SECOND
 import com.itis.android.githubapp.utils.extensions.provideViewModel
 import com.itis.android.githubapp.utils.functions.channelFromSearchView
 import kotlinx.android.synthetic.main.fragment_search.*
@@ -21,12 +21,9 @@ import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.channels.consumeEach
 
 @ExperimentalCoroutinesApi
-class SearchFragment : BaseFragment() {
+class SearchFragment : BaseFragment(), CoroutineScope by MainScope() {
 
     override val viewModel: SearchViewModel by provideViewModel()
-
-    private val job = Job()
-    private val scope = CoroutineScope(Dispatchers.Main + job)
 
     private var searchAdapter: SearchAdapter? = null
 
@@ -40,7 +37,7 @@ class SearchFragment : BaseFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        scope.coroutineContext.cancelChildren()
+        coroutineContext.cancelChildren()
     }
 
     override fun initObservers() {
@@ -60,11 +57,17 @@ class SearchFragment : BaseFragment() {
 
     private fun searchWithChannel() {
         val broadcast = ConflatedBroadcastChannel<String>()
-        scope.launch {
+        launch {
+            var lastTimeout: Job? = null
             broadcast.consumeEach {
-                delay(TIME_ONE_SECOND)
-                viewModel.search(it)
+                lastTimeout?.cancel()
+                lastTimeout = launch {
+                    delay(2000)
+                    viewModel.search(it)
+                    Log.e("CONSUME", "Hi: $it")
+                }
             }
+            lastTimeout?.join()
         }
         channelFromSearchView(sv_main, broadcast)
     }

@@ -1,14 +1,14 @@
 package com.itis.android.githubapp.ui
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.itis.android.githubapp.R
+import com.itis.testhelper.ui.BackgroundActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_toolbar_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BackgroundActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

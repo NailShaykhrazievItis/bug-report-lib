@@ -1,1 +1,18 @@
-<manifest package="com.itis.testhelper" />
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.itis.testhelper">
+
+    <uses-feature
+        android:name="android.hardware.sensor.accelerometer"
+        android:required="true" />
+
+    <application>
+        <activity
+            android:name=".ui.BackgroundActivity"
+            android:launchMode="singleInstance"
+            android:theme="@style/Theme.Transparent" />
+
+        <activity android:name=".ui.BugReportActivity" />
+    </application>
+
+</manifest>
