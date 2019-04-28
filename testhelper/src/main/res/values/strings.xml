@@ -2,4 +2,7 @@
     <string name="app_name">TestHelper</string>
     <string name="name">Name</string>
     <string name="description">Description</string>
+    <string name="actual_result">Actual Result</string>
+    <string name="expected_result">Expected Result</string>
+    <string name="bug_report">Bug Report</string>
 </resources>

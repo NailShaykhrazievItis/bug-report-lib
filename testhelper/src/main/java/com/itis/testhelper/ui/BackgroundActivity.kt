@@ -1,6 +1,7 @@
 package com.itis.testhelper.ui
 
 import android.annotation.SuppressLint
+import android.app.ActivityOptions
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Rect
@@ -117,7 +118,10 @@ open class BackgroundActivity : AppCompatActivity(), SensorEventListener {
 
     private fun navigateToReportScreen() {
         Intent(this, BugReportActivity::class.java).also {
-            startActivity(it)
+            val options = ActivityOptions
+                    .makeCustomAnimation(this, R.anim.slide_up_info, R.anim.no_change)
+                    .toBundle()
+            startActivity(it, options)
         }
     }
 
