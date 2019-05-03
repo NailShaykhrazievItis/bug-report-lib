@@ -5,4 +5,8 @@
     <string name="actual_result">Actual Result</string>
     <string name="expected_result">Expected Result</string>
     <string name="bug_report">Bug Report</string>
+    <string name="send">Send</string>
+    <string name="priority">Priority</string>
+    <string name="high">High</string>
+    <string name="steps">Steps</string>
 </resources>

@@ -12,7 +12,9 @@
             android:launchMode="singleInstance"
             android:theme="@style/Theme.Transparent" />
 
-        <activity android:name=".ui.BugReportActivity" />
+        <activity
+            android:name=".ui.BugReportActivity"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>
