@@ -19,16 +19,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.menu.MenuView
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.internal.BaselineLayout
 import com.itis.testhelper.R
+import com.itis.testhelper.utils.STRING_EMPTY
+import com.itis.testhelper.utils.extensions.getTextFromView
 
 open class BackgroundActivity : AppCompatActivity(), SensorEventListener {
 
     private var sensorManager: SensorManager? = null
     private var lastShakeTime: Long = 0
     private var fabButton: FloatingActionButton? = null
+
+    private var lastFoundView: View? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,16 +58,29 @@ open class BackgroundActivity : AppCompatActivity(), SensorEventListener {
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        if (ev.action == MotionEvent.ACTION_MOVE) {
+            return super.dispatchTouchEvent(ev)
+        }
         val view = findViewById<ViewGroup>(android.R.id.content)
         val res = findViewAt(view, ev.rawX.toInt(), ev.rawY.toInt())
         res?.also {
-            try {
-                val nameEntry = resources.getResourceEntryName(it.id)
-                Log.e("View", nameEntry)
-            } catch (ex: Resources.NotFoundException) {
-                Log.e("View", "Not Found")
+            if (it != lastFoundView && it.tag != TAG_REPORT_FAB) {
+                lastFoundView = it
+                val text = it.getTextFromView()
+                try {
+                    val nameEntry = resources.getResourceEntryName(it.id)
+                    var result = "View id: $nameEntry"
+                    result += if (text.isNotEmpty()) " with text: $text" else STRING_EMPTY
+                    Log.e("View", result)
+                } catch (ex: Resources.NotFoundException) { // If view have not ID
+                    val result = if (text.isNotEmpty()) "View with text: $text" else "Not Found"
+                    Log.e("View", result)
+                }
             }
+        } ?: run {
+            setNullToLastFoundView()
         }
+        if (ev.action == MotionEvent.ACTION_UP) setNullToLastFoundView()
         return super.dispatchTouchEvent(ev)
     }
 
@@ -97,6 +117,7 @@ open class BackgroundActivity : AppCompatActivity(), SensorEventListener {
         val displayMetrics = resources.displayMetrics
         fabButton = FloatingActionButton(this).apply {
             id = View.generateViewId()
+            tag = TAG_REPORT_FAB
             size = FloatingActionButton.SIZE_NORMAL
             layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT).apply {
@@ -145,13 +166,17 @@ open class BackgroundActivity : AppCompatActivity(), SensorEventListener {
 
     private fun findViewAt(viewGroup: ViewGroup, x: Int, y: Int): View? {
         for (i in 0 until viewGroup.childCount) {
-            val child = viewGroup.getChildAt(i)
-            if (child is ViewGroup) {
+            var child = viewGroup.getChildAt(i)
+            if (child is ViewGroup && child !is BaselineLayout &&
+                    child !is MenuView.ItemView && child !is SearchView) {
                 val foundView = findViewAt(child, x, y)
                 if (foundView != null && foundView.isShown) {
                     return foundView
                 }
             } else {
+                if (child is BaselineLayout) {
+                    child = child.parent as View
+                }
                 val location = IntArray(2)
                 child.getLocationOnScreen(location)
                 val rect = Rect(location[0], location[1],
@@ -165,6 +190,10 @@ open class BackgroundActivity : AppCompatActivity(), SensorEventListener {
         return null
     }
 
+    private fun setNullToLastFoundView() {
+        lastFoundView = null
+    }
+
     private fun checkClassContaining(fragment: Fragment): Boolean =
             fragment.activity?.packageName?.let {
                 fragment.javaClass.name.contains(it)
@@ -176,5 +205,7 @@ open class BackgroundActivity : AppCompatActivity(), SensorEventListener {
 
         private const val MARGIN_BOTTOM = 64f
         private const val MARGIN_END = 16f
+
+        private const val TAG_REPORT_FAB = "TAG_REPORT_FAB"
     }
 }

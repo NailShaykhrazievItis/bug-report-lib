@@ -1,13 +1,10 @@
-package com.itis.android.githubapp.di.module
+package com.itis.testhelper.di.module
 
-import com.itis.android.githubapp.BuildConfig
-import com.itis.android.githubapp.api.intercepors.ApiKeyInterceptor
-import com.itis.android.githubapp.api.intercepors.HeaderInterceptor
-import com.itis.android.githubapp.api.service.AuthService
-import com.itis.android.githubapp.api.service.RepoService
-import com.itis.android.githubapp.api.service.SearchService
-import com.itis.android.githubapp.api.service.UserService
 import com.itis.android.githubapp.utils.helpers.CoroutineCallAdapterFactory
+import com.itis.testhelper.BuildConfig
+import com.itis.testhelper.api.IssueService
+import com.itis.testhelper.api.intercepors.ApiKeyInterceptor
+import com.itis.testhelper.api.intercepors.HeaderInterceptor
 import com.itis.testhelper.api.intercepors.LoggingInterceptor
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -29,10 +26,7 @@ fun netModule() = Kodein.Module(name = "netModule") {
     }
     bind<Retrofit>() with singleton { provideRetrofit(instance()) }
 
-    bind<AuthService>() with singleton { instance<Retrofit>().create(AuthService::class.java) }
-    bind<RepoService>() with singleton { instance<Retrofit>().create(RepoService::class.java) }
-    bind<UserService>() with singleton { instance<Retrofit>().create(UserService::class.java) }
-    bind<SearchService>() with singleton { instance<Retrofit>().create(SearchService::class.java) }
+    bind<IssueService>() with singleton { instance<Retrofit>().create(IssueService::class.java) }
 }
 
 private fun provideOkHttpClient(loggingInterceptor: Interceptor,
