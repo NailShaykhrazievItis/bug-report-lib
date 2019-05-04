@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:clipToPadding="false"
     android:padding="16dp"
-    tools:context=".ui.BugReportActivity">
+    tools:context=".ui.bugreport.BugReportActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

@@ -1,11 +1,12 @@
 package com.itis.testhelper.di.module
 
 import com.itis.android.githubapp.utils.helpers.CoroutineCallAdapterFactory
-import com.itis.testhelper.BuildConfig
-import com.itis.testhelper.api.IssueService
 import com.itis.testhelper.api.intercepors.ApiKeyInterceptor
 import com.itis.testhelper.api.intercepors.HeaderInterceptor
 import com.itis.testhelper.api.intercepors.LoggingInterceptor
+import com.itis.testhelper.api.service.AuthService
+import com.itis.testhelper.api.service.IssueService
+import com.itis.testhelper.utils.API_ENDPOINT
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import org.kodein.di.Kodein
@@ -27,6 +28,7 @@ fun netModule() = Kodein.Module(name = "netModule") {
     bind<Retrofit>() with singleton { provideRetrofit(instance()) }
 
     bind<IssueService>() with singleton { instance<Retrofit>().create(IssueService::class.java) }
+    bind<AuthService>() with singleton { instance<Retrofit>().create(AuthService::class.java) }
 }
 
 private fun provideOkHttpClient(loggingInterceptor: Interceptor,
@@ -41,7 +43,7 @@ private fun provideOkHttpClient(loggingInterceptor: Interceptor,
 
 private fun provideRetrofit(client: OkHttpClient): Retrofit =
         Retrofit.Builder()
-                .baseUrl(BuildConfig.API_ENDPOINT)
+                .baseUrl(API_ENDPOINT)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(CoroutineCallAdapterFactory())

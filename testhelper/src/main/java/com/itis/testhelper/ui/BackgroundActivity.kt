@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.ActivityOptions
 import android.content.Intent
 import android.content.res.Resources
-import android.graphics.Rect
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -23,22 +22,35 @@ import androidx.appcompat.view.menu.MenuView
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.internal.BaselineLayout
 import com.itis.testhelper.R
+import com.itis.testhelper.model.Step
+import com.itis.testhelper.repository.PreferenceRepository
+import com.itis.testhelper.repository.RepositoryProvider
+import com.itis.testhelper.ui.bugreport.BugReportActivity
+import com.itis.testhelper.utils.POSITION_NO
 import com.itis.testhelper.utils.STRING_EMPTY
+import com.itis.testhelper.utils.extensions.getRectByView
 import com.itis.testhelper.utils.extensions.getTextFromView
+import kotlinx.coroutines.*
 
-open class BackgroundActivity : AppCompatActivity(), SensorEventListener {
+open class BackgroundActivity : AppCompatActivity(), SensorEventListener,
+        CoroutineScope by MainScope() {
 
     private var sensorManager: SensorManager? = null
     private var lastShakeTime: Long = 0
     private var fabButton: FloatingActionButton? = null
 
     private var lastFoundView: View? = null
+    private var lastItemPosition: Int = POSITION_NO
+
+    private lateinit var preferenceRepository: PreferenceRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        preferenceRepository = RepositoryProvider.getPreferenceRepository(applicationContext)
         initActionButton()
         initListeners()
         initFragmentCallbacks()
@@ -57,24 +69,35 @@ open class BackgroundActivity : AppCompatActivity(), SensorEventListener {
         sensorManager?.unregisterListener(this)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        coroutineContext.cancelChildren()
+    }
+
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
         if (ev.action == MotionEvent.ACTION_MOVE) {
             return super.dispatchTouchEvent(ev)
         }
         val view = findViewById<ViewGroup>(android.R.id.content)
-        val res = findViewAt(view, ev.rawX.toInt(), ev.rawY.toInt())
-        res?.also {
+        findViewAt(view, ev.rawX.toInt(), ev.rawY.toInt())?.also {
             if (it != lastFoundView && it.tag != TAG_REPORT_FAB) {
                 lastFoundView = it
                 val text = it.getTextFromView()
+                var result: String = STRING_EMPTY
                 try {
                     val nameEntry = resources.getResourceEntryName(it.id)
-                    var result = "View id: $nameEntry"
+                    result = "View id: $nameEntry"
                     result += if (text.isNotEmpty()) " with text: $text" else STRING_EMPTY
+                    if (lastItemPosition > POSITION_NO) {
+                        result += " with item position: $lastItemPosition"
+                        lastItemPosition = POSITION_NO
+                    }
                     Log.e("View", result)
                 } catch (ex: Resources.NotFoundException) { // If view have not ID
-                    val result = if (text.isNotEmpty()) "View with text: $text" else "Not Found"
+                    result = if (text.isNotEmpty()) "View with text: $text" else "Not Found"
                     Log.e("View", result)
+                } finally {
+                    saveStep(result)
                 }
             }
         } ?: run {
@@ -82,6 +105,11 @@ open class BackgroundActivity : AppCompatActivity(), SensorEventListener {
         }
         if (ev.action == MotionEvent.ACTION_UP) setNullToLastFoundView()
         return super.dispatchTouchEvent(ev)
+    }
+
+    override fun onBackPressed() {
+        saveStep("User pressed back")
+        super.onBackPressed()
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
@@ -151,7 +179,9 @@ open class BackgroundActivity : AppCompatActivity(), SensorEventListener {
             override fun onFragmentCreated(fm: FragmentManager, f: Fragment, savedInstanceState: Bundle?) {
                 super.onFragmentCreated(fm, f, savedInstanceState)
                 if (checkClassContaining(f)) {
-                    Log.e("User open", f.javaClass.simpleName)
+                    val result = "User open ${f.javaClass.simpleName}"
+                    Log.e("User open", result)
+                    saveStep(result)
                 }
             }
 
@@ -168,26 +198,44 @@ open class BackgroundActivity : AppCompatActivity(), SensorEventListener {
         for (i in 0 until viewGroup.childCount) {
             var child = viewGroup.getChildAt(i)
             if (child is ViewGroup && child !is BaselineLayout &&
-                    child !is MenuView.ItemView && child !is SearchView) {
+                    child !is MenuView.ItemView && child !is SearchView &&
+                    child !is RecyclerView) {
                 val foundView = findViewAt(child, x, y)
                 if (foundView != null && foundView.isShown) {
                     return foundView
                 }
             } else {
-                if (child is BaselineLayout) {
-                    child = child.parent as View
+                when (child) {
+                    is RecyclerView -> {
+                        findItemPositionInRecycler(child, x, y)
+                    }
+                    is BaselineLayout -> {
+                        child = child.parent as View
+                    }
                 }
-                val location = IntArray(2)
-                child.getLocationOnScreen(location)
-                val rect = Rect(location[0], location[1],
-                        location[0] + child.width,
-                        location[1] + child.height)
+                val rect = child.getRectByView()
                 if (rect.contains(x, y)) {
                     return child
                 }
             }
         }
         return null
+    }
+
+    private fun findItemPositionInRecycler(child: RecyclerView, x: Int, y: Int) {
+        for (j in 0 until child.childCount) {
+            val recyclerChild = child.getChildAt(j)
+            val rect = recyclerChild.getRectByView()
+            if (rect.contains(x, y)) {
+                lastItemPosition = j
+            }
+        }
+    }
+
+    private fun saveStep(result: String) {
+        launch(Dispatchers.IO) {
+            preferenceRepository.addStep(Step(result))
+        }
     }
 
     private fun setNullToLastFoundView() {

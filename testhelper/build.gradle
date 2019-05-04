@@ -23,7 +23,6 @@ android {
         }
     }
     buildTypes.each {
-        it.buildConfigField 'String', 'API_ENDPOINT', baseUrl
         it.buildConfigField 'String', 'CLIENT_ID', clientId
         it.buildConfigField 'String', 'CLIENT_SECRET', clientSecret
     }
