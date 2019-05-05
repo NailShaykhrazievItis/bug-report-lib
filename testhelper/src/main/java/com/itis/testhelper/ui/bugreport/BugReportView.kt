@@ -7,6 +7,8 @@ interface BugReportView : BaseView {
 
     fun initSteps(steps: List<Step>)
 
+    fun itemRemoved(position: Int)
+
     fun showSuccessCreateMessage(title: String)
 
     fun navigateToAuth()

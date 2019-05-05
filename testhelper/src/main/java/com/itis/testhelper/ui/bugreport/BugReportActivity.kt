@@ -3,6 +3,7 @@ package com.itis.testhelper.ui.bugreport
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.itis.testhelper.R
@@ -18,6 +19,7 @@ class BugReportActivity : AppCompatActivity(), BugReportView {
 
     private lateinit var adapterSeverity: ArrayAdapter<Severity>
     private lateinit var adapterPriority: ArrayAdapter<Priority>
+    private var stepsAdapter: StepsAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,9 +50,16 @@ class BugReportActivity : AppCompatActivity(), BugReportView {
     }
 
     override fun showError(throwable: Throwable) {
+        Toast.makeText(this, throwable.message, Toast.LENGTH_SHORT).show()
     }
 
     override fun initSteps(steps: List<Step>) {
+        stepsAdapter = StepsAdapter(ArrayList(steps)) { presenter.stepRemoved(it) }
+        rv_steps.adapter = stepsAdapter
+    }
+
+    override fun itemRemoved(position: Int) {
+        stepsAdapter?.removeItem(position)
     }
 
     override fun navigateToAuth() {
@@ -76,8 +85,8 @@ class BugReportActivity : AppCompatActivity(), BugReportView {
     private fun initPriorityAdapter() {
         val priority = arrayOf(Priority.HIGH, Priority.MEDIUM, Priority.LOW)
         adapterPriority = ArrayAdapter(this, android.R.layout.simple_spinner_item, priority)
-        adapterSeverity.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        adapterPriority.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         sp_priority.background.setColorFilter(ContextCompat.getColor(this, R.color.text_primary), PorterDuff.Mode.SRC_ATOP)
-        sp_priority.adapter = adapterSeverity
+        sp_priority.adapter = adapterPriority
     }
 }

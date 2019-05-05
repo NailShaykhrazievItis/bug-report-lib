@@ -24,6 +24,9 @@ class BugReportPresenter(
     }
 
     fun onSendClick(title: String) {
+        launch(Dispatchers.IO) {
+            preferenceRepository.clearSteps()
+        }
         if (preferenceRepository.getAuthToken().isNotEmpty()) {
             launch {
                 invokeSuspend {
@@ -39,6 +42,8 @@ class BugReportPresenter(
             // todo
         }
     }
+
+    fun stepRemoved(position: Int) = reportView.itemRemoved(position)
 
     private fun getIssueBody(): String {
         return STRING_EMPTY
