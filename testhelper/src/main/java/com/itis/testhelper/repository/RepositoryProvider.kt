@@ -7,6 +7,10 @@ class RepositoryProvider {
 
     companion object {
 
+        val issueRepository: IssueRepository by lazy {
+            IssueRepositoryImpl()
+        }
+
         @Volatile
         private var preferenceRepository: PreferenceRepository? = null
 
@@ -16,6 +20,8 @@ class RepositoryProvider {
                         preferenceRepository = it
                     }
                 }
+
+        fun getPreferenceRepository(): PreferenceRepository? = preferenceRepository
 
         private fun initPreferenceRepository(context: Context) =
                 PreferenceRepositoryImpl(PreferenceManager.getDefaultSharedPreferences(context))

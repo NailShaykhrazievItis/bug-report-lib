@@ -33,8 +33,20 @@ class PreferenceRepositoryImpl(private val sharedPreferences: SharedPreferences)
 
     override fun clearSteps() = sharedPreferences.edit().putString(KEY_STEPS, STRING_EMPTY).apply()
 
+    override fun saveUserName(name: String) = sharedPreferences.edit().putString(KEY_USER, name).apply()
+
+    override fun getUserName(): String = sharedPreferences.getString(KEY_USER, STRING_EMPTY)
+            ?: STRING_EMPTY
+
+    override fun getCurrentRepoName(): String = sharedPreferences.getString(KEY_REPO, STRING_EMPTY)
+            ?: STRING_EMPTY
+
+    override fun saveRepoName(name: String) = sharedPreferences.edit().putString(KEY_REPO, name).apply()
+
     companion object {
         private const val KEY_TOKEN = "key_token"
         private const val KEY_STEPS = "key_steps"
+        private const val KEY_USER = "key_user"
+        private const val KEY_REPO = "key_repo"
     }
 }

@@ -10,6 +10,14 @@ interface PreferenceRepository {
 
     fun removeToken(): Boolean
 
+    fun saveUserName(name: String)
+
+    fun getUserName(): String
+
+    fun getCurrentRepoName(): String
+
+    fun saveRepoName(name: String)
+
     fun addStep(step: Step)
 
     fun getSteps(): List<Step>

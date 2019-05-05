@@ -8,29 +8,32 @@ import androidx.core.content.ContextCompat
 import com.itis.testhelper.R
 import com.itis.testhelper.model.Priority
 import com.itis.testhelper.model.Severity
-import com.itis.testhelper.repository.PreferenceRepository
+import com.itis.testhelper.model.Step
 import com.itis.testhelper.repository.RepositoryProvider
 import kotlinx.android.synthetic.main.activity_bug_report.*
-import kotlinx.coroutines.*
 
-class BugReportActivity : AppCompatActivity(), CoroutineScope by MainScope() {
+class BugReportActivity : AppCompatActivity(), BugReportView {
 
-    private lateinit var preferenceRepository: PreferenceRepository
+    private lateinit var presenter: BugReportPresenter
+
+    private lateinit var adapterSeverity: ArrayAdapter<Severity>
+    private lateinit var adapterPriority: ArrayAdapter<Priority>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        preferenceRepository = RepositoryProvider.getPreferenceRepository(applicationContext)
         setContentView(R.layout.activity_bug_report)
+        presenter = BugReportPresenter(this,
+                RepositoryProvider.getPreferenceRepository(applicationContext),
+                RepositoryProvider.issueRepository
+        )
         initListeners()
         initPriorityAdapter()
         initSeverityAdapter()
-        val tt = preferenceRepository.getSteps()
-        val b = 5
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        coroutineContext.cancelChildren()
+        presenter.onDestroy()
     }
 
     override fun onBackPressed() {
@@ -38,18 +41,33 @@ class BugReportActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         overridePendingTransition(R.anim.no_change, R.anim.exit_to_bottom)
     }
 
+    override fun showLoading() {
+    }
+
+    override fun hideLoading() {
+    }
+
+    override fun showError(throwable: Throwable) {
+    }
+
+    override fun initSteps(steps: List<Step>) {
+    }
+
+    override fun navigateToAuth() {
+    }
+
+    override fun showSuccessCreateMessage(title: String) {
+
+    }
+
     private fun initListeners() {
         iv_report_back.setOnClickListener { onBackPressed() }
-        btn_report_send.setOnClickListener {
-            launch(Dispatchers.IO) {
-                preferenceRepository.clearSteps()
-            }
-        }
+        btn_report_send.setOnClickListener { presenter.onSendClick(et_report_name.text.toString()) }
     }
 
     private fun initSeverityAdapter() {
         val severity = arrayOf(Severity.BLOCKER, Severity.CRITICAL, Severity.MAJOR, Severity.MINOR, Severity.TRIVIAL)
-        val adapterSeverity = ArrayAdapter<Severity>(this, android.R.layout.simple_spinner_item, severity)
+        adapterSeverity = ArrayAdapter(this, android.R.layout.simple_spinner_item, severity)
         adapterSeverity.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         sp_severity.background.setColorFilter(ContextCompat.getColor(this, R.color.text_primary), PorterDuff.Mode.SRC_ATOP)
         sp_severity.adapter = adapterSeverity
@@ -57,7 +75,7 @@ class BugReportActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
     private fun initPriorityAdapter() {
         val priority = arrayOf(Priority.HIGH, Priority.MEDIUM, Priority.LOW)
-        val adapterSeverity = ArrayAdapter<Priority>(this, android.R.layout.simple_spinner_item, priority)
+        adapterPriority = ArrayAdapter(this, android.R.layout.simple_spinner_item, priority)
         adapterSeverity.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         sp_priority.background.setColorFilter(ContextCompat.getColor(this, R.color.text_primary), PorterDuff.Mode.SRC_ATOP)
         sp_priority.adapter = adapterSeverity
