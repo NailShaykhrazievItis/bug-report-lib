@@ -1,5 +1,6 @@
 package com.itis.testhelper.ui.bugreport
 
+import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.widget.ArrayAdapter
@@ -11,6 +12,7 @@ import com.itis.testhelper.model.Priority
 import com.itis.testhelper.model.Severity
 import com.itis.testhelper.model.Step
 import com.itis.testhelper.repository.RepositoryProvider
+import com.itis.testhelper.ui.settings.SettingsActivity
 import kotlinx.android.synthetic.main.activity_bug_report.*
 
 class BugReportActivity : AppCompatActivity(), BugReportView {
@@ -63,6 +65,7 @@ class BugReportActivity : AppCompatActivity(), BugReportView {
     }
 
     override fun navigateToAuth() {
+        startActivity(Intent(this, SettingsActivity::class.java))
     }
 
     override fun showSuccessCreateMessage(title: String) {

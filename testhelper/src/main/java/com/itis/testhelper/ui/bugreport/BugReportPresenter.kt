@@ -24,9 +24,9 @@ class BugReportPresenter(
     }
 
     fun onSendClick(title: String) {
-        launch(Dispatchers.IO) {
-            preferenceRepository.clearSteps()
-        }
+//        launch(Dispatchers.IO) {
+//            preferenceRepository.clearSteps()
+//        }
         if (preferenceRepository.getAuthToken().isNotEmpty()) {
             launch {
                 invokeSuspend {
@@ -39,7 +39,7 @@ class BugReportPresenter(
                 }
             }
         } else {
-            // todo
+            reportView.navigateToAuth()
         }
     }
 

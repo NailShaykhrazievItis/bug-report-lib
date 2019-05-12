@@ -34,7 +34,8 @@ object ApiFactory {
     private val client: OkHttpClient by lazy {
         OkHttpClient.Builder()
                 .addInterceptor(LoggingInterceptor())
-                .addInterceptor(HeaderInterceptor()).let { builder ->
+                .addInterceptor(HeaderInterceptor())
+                .let { builder ->
                     RepositoryProvider.getPreferenceRepository()?.also {
                         builder.addInterceptor(ApiKeyInterceptor(it))
                     }

@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">TestHelper</string>
+    <string name="empty" />
+
     <string name="name">Name</string>
     <string name="description">Description</string>
     <string name="actual_result">Actual Result</string>
@@ -9,4 +11,9 @@
     <string name="priority">Priority</string>
     <string name="high">High</string>
     <string name="steps">Steps</string>
+
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="settings">Settings</string>
+
 </resources>

@@ -11,6 +11,10 @@ class RepositoryProvider {
             IssueRepositoryImpl()
         }
 
+        val authRepository: AuthRepository by lazy {
+            AuthRepositoryImpl()
+        }
+
         @Volatile
         private var preferenceRepository: PreferenceRepository? = null
 
