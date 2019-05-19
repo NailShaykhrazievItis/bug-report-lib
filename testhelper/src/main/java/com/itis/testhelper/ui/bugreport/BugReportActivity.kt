@@ -27,7 +27,8 @@ class BugReportActivity : AppCompatActivity(), BugReportView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bug_report)
         presenter = BugReportPresenter(this,
-                RepositoryProvider.getPreferenceRepository(applicationContext),
+                RepositoryProvider.getStepsRepository(applicationContext),
+                RepositoryProvider.getUserRepository(applicationContext),
                 RepositoryProvider.issueRepository
         )
         initListeners()
@@ -81,7 +82,7 @@ class BugReportActivity : AppCompatActivity(), BugReportView {
         val severity = arrayOf(Severity.BLOCKER, Severity.CRITICAL, Severity.MAJOR, Severity.MINOR, Severity.TRIVIAL)
         adapterSeverity = ArrayAdapter(this, android.R.layout.simple_spinner_item, severity)
         adapterSeverity.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        sp_severity.background.setColorFilter(ContextCompat.getColor(this, R.color.text_primary), PorterDuff.Mode.SRC_ATOP)
+        sp_severity.background.setColorFilter(ContextCompat.getColor(this, R.color.icon), PorterDuff.Mode.SRC_ATOP)
         sp_severity.adapter = adapterSeverity
     }
 
@@ -89,7 +90,7 @@ class BugReportActivity : AppCompatActivity(), BugReportView {
         val priority = arrayOf(Priority.HIGH, Priority.MEDIUM, Priority.LOW)
         adapterPriority = ArrayAdapter(this, android.R.layout.simple_spinner_item, priority)
         adapterPriority.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        sp_priority.background.setColorFilter(ContextCompat.getColor(this, R.color.text_primary), PorterDuff.Mode.SRC_ATOP)
+        sp_priority.background.setColorFilter(ContextCompat.getColor(this, R.color.icon), PorterDuff.Mode.SRC_ATOP)
         sp_priority.adapter = adapterPriority
     }
 }

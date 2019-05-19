@@ -18,9 +18,7 @@ class SignInFragment : Fragment(), SignInView {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_sign_in, container, false)
         context?.also {
-            presenter = SignInPresenter(this,
-                    RepositoryProvider.getPreferenceRepository(it),
-                    RepositoryProvider.authRepository)
+            presenter = SignInPresenter(this, RepositoryProvider.getUserRepository(it))
         }
         return view
     }

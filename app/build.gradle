@@ -107,7 +107,7 @@ dependencies {
 
     implementation 'com.github.rahatarmanahmed:circularprogressview:2.5.0'
 
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha4'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
 
     implementation project(":testhelper")
 

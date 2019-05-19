@@ -13,6 +13,6 @@ class IssueRepositoryImpl : IssueRepository {
                                      title: String,
                                      body: String): IssueResponse = withContext(Dispatchers.IO) {
         val issueBody = IssueBody(title, body)
-        ApiFactory.issueService.createIssueAsync(user, repo, issueBody).await()
+        ApiFactory.githubService.createIssueAsync(user, repo, issueBody).await()
     }
 }

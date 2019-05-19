@@ -11,23 +11,31 @@ class RepositoryProvider {
             IssueRepositoryImpl()
         }
 
-        val authRepository: AuthRepository by lazy {
-            AuthRepositoryImpl()
-        }
-
         @Volatile
-        private var preferenceRepository: PreferenceRepository? = null
+        private var stepsRepository: StepsRepository? = null
+        @Volatile
+        private var userRepository: UserRepository? = null
 
-        fun getPreferenceRepository(context: Context): PreferenceRepository =
-                preferenceRepository ?: synchronized(this) {
-                    preferenceRepository ?: initPreferenceRepository(context).also {
-                        preferenceRepository = it
+        fun getStepsRepository(context: Context): StepsRepository =
+                stepsRepository ?: synchronized(this) {
+                    stepsRepository ?: initStepsRepository(context).also {
+                        stepsRepository = it
                     }
                 }
 
-        fun getPreferenceRepository(): PreferenceRepository? = preferenceRepository
+        fun getUserRepository(context: Context): UserRepository =
+                userRepository ?: synchronized(this) {
+                    userRepository ?: initUserRepository(context).also {
+                        userRepository = it
+                    }
+                }
 
-        private fun initPreferenceRepository(context: Context) =
-                PreferenceRepositoryImpl(PreferenceManager.getDefaultSharedPreferences(context))
+        fun getUserRepository(): UserRepository? = userRepository
+
+        private fun initStepsRepository(context: Context) =
+                StepsRepositoryImpl(PreferenceManager.getDefaultSharedPreferences(context))
+
+        private fun initUserRepository(context: Context) =
+                UserRepositoryImpl(PreferenceManager.getDefaultSharedPreferences(context))
     }
 }

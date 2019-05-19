@@ -27,8 +27,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.internal.BaselineLayout
 import com.itis.testhelper.R
 import com.itis.testhelper.model.Step
-import com.itis.testhelper.repository.PreferenceRepository
 import com.itis.testhelper.repository.RepositoryProvider
+import com.itis.testhelper.repository.StepsRepository
 import com.itis.testhelper.ui.bugreport.BugReportActivity
 import com.itis.testhelper.utils.POSITION_NO
 import com.itis.testhelper.utils.STRING_EMPTY
@@ -46,11 +46,11 @@ open class BackgroundActivity : AppCompatActivity(), SensorEventListener,
     private var lastFoundView: View? = null
     private var lastItemPosition: Int = POSITION_NO
 
-    private lateinit var preferenceRepository: PreferenceRepository
+    private lateinit var stepsRepository: StepsRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        preferenceRepository = RepositoryProvider.getPreferenceRepository(applicationContext)
+        stepsRepository = RepositoryProvider.getStepsRepository(applicationContext)
         initActionButton()
         initListeners()
         initFragmentCallbacks()
@@ -234,7 +234,7 @@ open class BackgroundActivity : AppCompatActivity(), SensorEventListener,
 
     private fun saveStep(result: String) {
         launch(Dispatchers.IO) {
-            preferenceRepository.addStep(Step(result))
+            stepsRepository.addStep(Step(result))
         }
     }
 

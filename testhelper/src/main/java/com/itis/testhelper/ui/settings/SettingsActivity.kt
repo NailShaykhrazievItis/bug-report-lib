@@ -3,7 +3,7 @@ package com.itis.testhelper.ui.settings
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.itis.testhelper.R
-import com.itis.testhelper.ui.settings.auth.SignInFragment
+import com.itis.testhelper.ui.settings.setting.SettingsFragment
 import kotlinx.android.synthetic.main.activity_settings.*
 
 class SettingsActivity : AppCompatActivity() {
@@ -16,7 +16,7 @@ class SettingsActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
         supportFragmentManager.beginTransaction()
-                .replace(R.id.container, SignInFragment.newInstance())
+                .replace(R.id.container, SettingsFragment.newInstance())
                 .commit()
     }
 }

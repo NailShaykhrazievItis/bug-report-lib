@@ -75,27 +75,47 @@
                 android:textSize="16sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/sp_severity"
-            style="@style/TextAppearance.MaterialComponents.Subtitle1"
+        <FrameLayout
+            android:id="@+id/sp_severity_cont"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:background="@drawable/bkg_corner"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ti_report_desc"
-            tools:listheader="Severity" />
+            app:layout_constraintTop_toBottomOf="@id/ti_report_desc">
 
-        <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/sp_priority"
-            style="@style/TextAppearance.MaterialComponents.Subtitle1"
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/sp_severity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="4dp"
+                android:paddingTop="16dp"
+                android:paddingEnd="4dp"
+                android:paddingBottom="16dp"
+                tools:listheader="Severity" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/sp_priority_cont"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bkg_corner"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sp_severity"
-            tools:listheader="Severity" />
+            app:layout_constraintTop_toBottomOf="@id/sp_severity_cont">
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/sp_priority"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="4dp"
+                android:paddingTop="16dp"
+                android:paddingEnd="4dp"
+                android:paddingBottom="16dp"
+                tools:listheader="Severity" />
+        </FrameLayout>
 
         <TextView
             android:id="@+id/tv_report_steps_title"
@@ -106,7 +126,7 @@
             android:text="@string/steps"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sp_priority" />
+            app:layout_constraintTop_toBottomOf="@id/sp_priority_cont" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_steps"

@@ -1,13 +1,21 @@
 package com.itis.testhelper.api.service
 
+import com.google.gson.JsonObject
+import com.itis.testhelper.model.Authorization
+import com.itis.testhelper.model.User
 import com.itis.testhelper.model.request.IssueBody
 import com.itis.testhelper.model.response.IssueResponse
 import kotlinx.coroutines.Deferred
-import retrofit2.http.Body
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
-interface IssueService {
+interface GithubService {
+
+    @POST("authorizations")
+    fun authorizeAsync(@Header("Authorization") authorization: String,
+                       @Body params: JsonObject): Deferred<Authorization>
+
+    @GET("user")
+    fun getUserByTokenAsync(): Deferred<User>
 
     @POST("repos/{owner}/{repo}/issues")
     fun createIssueAsync(@Path("owner") user: String,
