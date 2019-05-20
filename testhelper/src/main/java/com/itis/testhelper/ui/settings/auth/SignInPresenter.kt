@@ -15,7 +15,10 @@ class SignInPresenter(
             invokeSuspend {
                 val result = userRepository.getAuthAsync(login, password)
                 launch(Dispatchers.IO) {
-                    userRepository.saveAuthToken(result.token)
+                    result.token.let {
+                        userRepository.saveAuthToken(it)
+                        userRepository.saveUser(userRepository.getUserByTokenAsync())
+                    }
                 }
                 view.successSignIn(result.token)
             }

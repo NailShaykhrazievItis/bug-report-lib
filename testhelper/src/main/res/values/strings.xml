@@ -22,5 +22,6 @@
     <string name="user_name">Name</string>
     <string name="profile">Profile</string>
     <string name="choose_repository">Choose repository</string>
+    <string name="select_repository">Please, select your work repository</string>
 
 </resources>

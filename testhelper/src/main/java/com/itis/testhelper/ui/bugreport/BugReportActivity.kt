@@ -65,7 +65,7 @@ class BugReportActivity : AppCompatActivity(), BugReportView {
         stepsAdapter?.removeItem(position)
     }
 
-    override fun navigateToAuth() {
+    override fun navigateToSettings() {
         startActivity(Intent(this, SettingsActivity::class.java))
     }
 
@@ -75,6 +75,7 @@ class BugReportActivity : AppCompatActivity(), BugReportView {
 
     private fun initListeners() {
         iv_report_back.setOnClickListener { onBackPressed() }
+        iv_settings.setOnClickListener { presenter.onSettingClick() }
         btn_report_send.setOnClickListener { presenter.onSendClick(et_report_name.text.toString()) }
     }
 

@@ -26,6 +26,6 @@ class StepsRepositoryImpl(private val sharedPreferences: SharedPreferences) : St
     override fun clearSteps() = sharedPreferences.edit().putString(KEY_STEPS, STRING_EMPTY).apply()
 
     companion object {
-        private const val KEY_STEPS = "key_steps"
+        private const val KEY_STEPS = "key_report_steps"
     }
 }

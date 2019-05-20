@@ -37,6 +37,7 @@ class SignInFragment : Fragment(), SignInView {
 
     override fun successSignIn(token: String) {
         Toast.makeText(context, "SUCCESS AUTH: $token", Toast.LENGTH_LONG).show()
+        activity?.onBackPressed()
     }
 
     override fun showLoading() {
@@ -45,8 +46,8 @@ class SignInFragment : Fragment(), SignInView {
     }
 
     override fun hideLoading() {
-        btn_sign_in_login.isEnabled = true
-        progress.visibility = View.GONE
+        btn_sign_in_login?.isEnabled = true
+        progress?.visibility = View.GONE
     }
 
     override fun showError(throwable: Throwable) {

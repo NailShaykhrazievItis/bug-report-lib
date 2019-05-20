@@ -41,9 +41,11 @@ class BugReportPresenter(
                 }
             }
         } else {
-            reportView.navigateToAuth()
+            reportView.navigateToSettings()
         }
     }
+
+    fun onSettingClick() = reportView.navigateToSettings()
 
     fun stepRemoved(position: Int) = reportView.itemRemoved(position)
 

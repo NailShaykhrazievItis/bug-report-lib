@@ -11,5 +11,5 @@ interface BugReportView : BaseView {
 
     fun showSuccessCreateMessage(title: String)
 
-    fun navigateToAuth()
+    fun navigateToSettings()
 }

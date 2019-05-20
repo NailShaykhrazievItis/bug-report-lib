@@ -12,4 +12,8 @@ interface SettingsView : BaseView {
     fun showUserRepo()
     fun hideUserRepo()
     fun setChooseRepoName(name: String)
+    fun setEmptyRepoName()
+    fun showSignOutButton()
+    fun hideSignOutButton()
+    fun navigateToSignInScreen()
 }

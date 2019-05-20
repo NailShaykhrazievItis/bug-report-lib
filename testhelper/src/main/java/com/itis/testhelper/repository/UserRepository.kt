@@ -7,6 +7,10 @@ interface UserRepository {
 
     suspend fun getAuthAsync(login: String, password: String): Authorization
 
+    suspend fun getUserByTokenAsync(): User
+
+    suspend fun getUser(): User?
+
     fun saveAuthToken(token: String): Boolean
 
     fun getAuthToken(): String
@@ -19,7 +23,7 @@ interface UserRepository {
 
     fun saveUser(user: User)
 
-    fun getUser(): User?
+    fun removeUser()
 
     fun getCurrentRepoName(): String
 

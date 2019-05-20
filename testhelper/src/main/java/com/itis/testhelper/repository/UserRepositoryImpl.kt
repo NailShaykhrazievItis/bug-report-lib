@@ -22,6 +22,20 @@ class UserRepositoryImpl(private val sharedPreferences: SharedPreferences) : Use
                 ApiFactory.githubService.authorizeAsync(authorizationString, createAuthorizationParam()).await()
             }
 
+    override suspend fun getUserByTokenAsync(): User = withContext(Dispatchers.IO) {
+        ApiFactory.githubService.getUserByTokenAsync().await()
+    }
+
+    override suspend fun getUser(): User? = withContext(Dispatchers.IO) {
+        sharedPreferences.getString(KEY_USER, STRING_EMPTY)?.let {
+            if (it.isNotEmpty()) {
+                Gson().fromJson(it, object : TypeToken<User>() {}.type)
+            } else {
+                null
+            }
+        }
+    }
+
     override fun saveAuthToken(token: String) =
             sharedPreferences.edit().putString(KEY_TOKEN, token).commit()
 
@@ -40,14 +54,7 @@ class UserRepositoryImpl(private val sharedPreferences: SharedPreferences) : Use
         sharedPreferences.edit().putString(KEY_USER, json).apply()
     }
 
-    override fun getUser(): User? =
-            sharedPreferences.getString(KEY_USER, STRING_EMPTY)?.let {
-                if (it.isNotEmpty()) {
-                    Gson().fromJson(it, object : TypeToken<User>() {}.type)
-                } else {
-                    null
-                }
-            }
+    override fun removeUser() = sharedPreferences.edit().putString(KEY_USER, STRING_EMPTY).apply()
 
     override fun getCurrentRepoName(): String = sharedPreferences.getString(KEY_REPO, STRING_EMPTY)
             ?: STRING_EMPTY
@@ -72,9 +79,9 @@ class UserRepositoryImpl(private val sharedPreferences: SharedPreferences) : Use
         private const val CLIENT_ID_PROPERTY = "client_id"
         private const val CLIENT_SECRET_PROPERTY = "client_secret"
 
-        private const val KEY_TOKEN = "key_token"
-        private const val KEY_REPO = "key_repo"
-        private const val KEY_USER = "key_user"
-        private const val KEY_USER_NAME = "key_user_name"
+        private const val KEY_TOKEN = "key_report_user_token"
+        private const val KEY_REPO = "key_report_repo"
+        private const val KEY_USER = "key_report_user"
+        private const val KEY_USER_NAME = "key_report_user_name"
     }
 }
