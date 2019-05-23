@@ -1,7 +1,8 @@
 package com.itis.testhelper.repository
 
-import com.itis.testhelper.model.Authorization
+import com.itis.testhelper.model.Repository
 import com.itis.testhelper.model.User
+import com.itis.testhelper.model.response.Authorization
 
 interface UserRepository {
 
@@ -10,6 +11,8 @@ interface UserRepository {
     suspend fun getUserByTokenAsync(): User
 
     suspend fun getUser(): User?
+
+    suspend fun getRepositoriesAsync(): List<Repository>
 
     fun saveAuthToken(token: String): Boolean
 
@@ -28,4 +31,6 @@ interface UserRepository {
     fun getCurrentRepoName(): String
 
     fun saveRepoName(name: String)
+
+    fun removeRepoName()
 }

@@ -23,7 +23,6 @@ class SignInFragment : Fragment(), SignInView {
         return view
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as? AppCompatActivity)?.supportActionBar?.title = getString(R.string.login)
@@ -33,6 +32,11 @@ class SignInFragment : Fragment(), SignInView {
                     et_sign_in_pass.text.toString()
             )
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.onDestroy()
     }
 
     override fun successSignIn(token: String) {

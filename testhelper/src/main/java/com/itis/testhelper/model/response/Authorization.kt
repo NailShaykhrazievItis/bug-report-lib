@@ -1,4 +1,4 @@
-package com.itis.testhelper.model
+package com.itis.testhelper.model.response
 
 import com.google.gson.annotations.SerializedName
 

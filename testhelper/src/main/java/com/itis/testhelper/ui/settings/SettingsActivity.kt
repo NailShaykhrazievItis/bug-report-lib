@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.itis.testhelper.R
 import com.itis.testhelper.ui.settings.auth.SignInFragment
+import com.itis.testhelper.ui.settings.repo.ChooseRepoFragment
 import com.itis.testhelper.ui.settings.setting.SettingsFragment
 import kotlinx.android.synthetic.main.activity_settings.*
 
@@ -35,6 +36,8 @@ class SettingsActivity : AppCompatActivity() {
                     .commit()
 
     fun openSignInFragment() = forwardTo(SignInFragment.newInstance())
+
+    fun openChooseRepoFragment() = forwardTo(ChooseRepoFragment.newInstance())
 
     private fun replaceTo(fragment: Fragment) {
         supportFragmentManager.beginTransaction()

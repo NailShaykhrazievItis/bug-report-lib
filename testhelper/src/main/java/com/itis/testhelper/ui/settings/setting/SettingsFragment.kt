@@ -1,6 +1,5 @@
 package com.itis.testhelper.ui.settings.setting
 
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,6 +12,7 @@ import com.itis.testhelper.R
 import com.itis.testhelper.repository.RepositoryProvider
 import com.itis.testhelper.ui.settings.SettingsActivity
 import com.itis.testhelper.utils.STRING_EMPTY
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_settings.*
 
 class SettingsFragment : Fragment(), SettingsView {
@@ -47,9 +47,7 @@ class SettingsFragment : Fragment(), SettingsView {
 
     override fun onDestroy() {
         super.onDestroy()
-        (activity as? AppCompatActivity)?.supportFragmentManager?.apply {
-            removeOnBackStackChangedListener { }
-        }
+        presenter.onDestroy()
     }
 
     override fun setUserLogin(login: String) {
@@ -61,7 +59,7 @@ class SettingsFragment : Fragment(), SettingsView {
     }
 
     override fun setUserAvatar(avatarUrl: String) {
-        iv_avatar.setImageURI(Uri.parse(avatarUrl))
+        Picasso.with(context).load(avatarUrl).into(iv_avatar)
     }
 
     override fun showUserProfile() {
@@ -112,6 +110,10 @@ class SettingsFragment : Fragment(), SettingsView {
 
     override fun navigateToSignInScreen() {
         (activity as? SettingsActivity)?.openSignInFragment()
+    }
+
+    override fun navigateToRepoChooseScreen() {
+        (activity as? SettingsActivity)?.openChooseRepoFragment()
     }
 
     private fun initListeners() {

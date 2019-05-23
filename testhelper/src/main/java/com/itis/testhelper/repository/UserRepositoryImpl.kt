@@ -4,10 +4,10 @@ import android.content.SharedPreferences
 import android.util.Base64
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import com.google.gson.reflect.TypeToken
 import com.itis.testhelper.api.ApiFactory
-import com.itis.testhelper.model.Authorization
+import com.itis.testhelper.model.Repository
 import com.itis.testhelper.model.User
+import com.itis.testhelper.model.response.Authorization
 import com.itis.testhelper.utils.CLIENT_ID
 import com.itis.testhelper.utils.CLIENT_SECRET
 import com.itis.testhelper.utils.STRING_EMPTY
@@ -29,11 +29,15 @@ class UserRepositoryImpl(private val sharedPreferences: SharedPreferences) : Use
     override suspend fun getUser(): User? = withContext(Dispatchers.IO) {
         sharedPreferences.getString(KEY_USER, STRING_EMPTY)?.let {
             if (it.isNotEmpty()) {
-                Gson().fromJson(it, object : TypeToken<User>() {}.type)
+                Gson().fromJson(it, User::class.java)
             } else {
                 null
             }
         }
+    }
+
+    override suspend fun getRepositoriesAsync(): List<Repository> = withContext(Dispatchers.IO) {
+        ApiFactory.githubService.getUserReposAsync().await()
     }
 
     override fun saveAuthToken(token: String) =
@@ -60,6 +64,8 @@ class UserRepositoryImpl(private val sharedPreferences: SharedPreferences) : Use
             ?: STRING_EMPTY
 
     override fun saveRepoName(name: String) = sharedPreferences.edit().putString(KEY_REPO, name).apply()
+
+    override fun removeRepoName() = saveRepoName(STRING_EMPTY)
 
     private fun createAuthorizationString(login: String, password: String): String {
         val combinedStr = String.format("%s:%s", login, password)

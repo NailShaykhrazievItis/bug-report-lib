@@ -45,13 +45,15 @@ class SettingsPresenter(
     }
 
     fun onSignOutClick() {
-
+        launch(Dispatchers.IO) {
+            userRepository.removeUser()
+            userRepository.removeToken()
+            userRepository.removeRepoName()
+        }
     }
 
     fun onSignInClick() = view.navigateToSignInScreen()
 
-    fun onRepoChooseClick() {
-
-    }
+    fun onRepoChooseClick() = view.navigateToRepoChooseScreen()
 
 }
