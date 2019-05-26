@@ -3,6 +3,7 @@ package com.itis.testhelper.ui.bugreport
 import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -47,9 +48,11 @@ class BugReportActivity : AppCompatActivity(), BugReportView {
     }
 
     override fun showLoading() {
+        pb_steps.visibility = View.VISIBLE
     }
 
     override fun hideLoading() {
+        pb_steps.visibility = View.GONE
     }
 
     override fun showError(throwable: Throwable) {

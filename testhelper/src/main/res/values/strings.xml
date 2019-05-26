@@ -24,5 +24,6 @@
     <string name="profile">Profile</string>
     <string name="choose_repository">Choose repository</string>
     <string name="select_repository">Please, select your work repository</string>
+    <string name="provide_repo_name">Provide repository name</string>
 
 </resources>

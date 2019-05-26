@@ -18,11 +18,7 @@ class BugReportPresenter(
 ) : BasePresenter(reportView) {
 
     init {
-        launch {
-            reportView.initSteps(withContext(Dispatchers.IO) {
-                stepsRepository.getSteps()
-            })
-        }
+        fetchSteps()
     }
 
     fun onSendClick(title: String) {
@@ -48,6 +44,16 @@ class BugReportPresenter(
     fun onSettingClick() = reportView.navigateToSettings()
 
     fun stepRemoved(position: Int) = reportView.itemRemoved(position)
+
+    private fun fetchSteps() {
+        launch {
+            invokeSuspend {
+                reportView.initSteps(withContext(Dispatchers.IO) {
+                    stepsRepository.getSteps()
+                })
+            }
+        }
+    }
 
     private fun getIssueBody(): String {
         return STRING_EMPTY

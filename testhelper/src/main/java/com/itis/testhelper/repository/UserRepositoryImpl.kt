@@ -23,7 +23,9 @@ class UserRepositoryImpl(private val sharedPreferences: SharedPreferences) : Use
             }
 
     override suspend fun getUserByTokenAsync(): User = withContext(Dispatchers.IO) {
-        ApiFactory.githubService.getUserByTokenAsync().await()
+        val user = ApiFactory.githubService.getUserByTokenAsync().await()
+        saveUser(user)
+        user
     }
 
     override suspend fun getUser(): User? = withContext(Dispatchers.IO) {

@@ -18,6 +18,7 @@
     <style name="ProfileCardViewStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/white_80</item>
         <item name="android:elevation" tools:ignore="NewApi">4dp</item>
         <item name="cardBackgroundColor">@color/white_80</item>
         <item name="cardCornerRadius">6dp</item>

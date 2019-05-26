@@ -59,7 +59,7 @@ class ChooseRepoFragment : Fragment(), ChooseRepoView {
         context?.let {
             AlertDialog.Builder(it).apply {
                 val dialogView = LayoutInflater.from(it).inflate(R.layout.dialog_enter_repo, null)
-                setTitle("Provide repository name")
+                setTitle(getString(R.string.provide_repo_name))
                 setView(dialogView)
                 setPositiveButton("OK") { _, _ ->
                     presenter.saveRepoName(dialogView.et_repo.text.toString())
