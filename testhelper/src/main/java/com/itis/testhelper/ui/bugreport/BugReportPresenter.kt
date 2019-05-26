@@ -1,5 +1,6 @@
 package com.itis.testhelper.ui.bugreport
 
+import com.itis.testhelper.model.Step
 import com.itis.testhelper.repository.IssueRepository
 import com.itis.testhelper.repository.StepsRepository
 import com.itis.testhelper.repository.UserRepository
@@ -16,6 +17,8 @@ class BugReportPresenter(
         private val userRepository: UserRepository,
         private val issueRepository: IssueRepository
 ) : BasePresenter(reportView) {
+
+    private var steps = ArrayList<Step>()
 
     init {
         fetchSteps()
@@ -43,14 +46,34 @@ class BugReportPresenter(
 
     fun onSettingClick() = reportView.navigateToSettings()
 
-    fun stepRemoved(position: Int) = reportView.itemRemoved(position)
+    fun onItemClick(step: Step) {
+        reportView.showChangeStepDialog(step.name)
+        steps.find {
+            it == step
+        }
+    }
+
+    fun stepRemoved(position: Int) {
+        reportView.itemRemoved(position)
+        steps.removeAt(position)
+        stepsRepository.addSteps(steps)
+    }
+
+    fun onClearAllClick() {
+        stepsRepository.clearSteps()
+        fetchSteps()
+    }
+
+    fun onAddStepClick() {}
 
     private fun fetchSteps() {
         launch {
             invokeSuspend {
-                reportView.initSteps(withContext(Dispatchers.IO) {
+                val list = withContext(Dispatchers.IO) {
                     stepsRepository.getSteps()
-                })
+                }
+                steps = ArrayList(list)
+                reportView.initSteps(list)
             }
         }
     }

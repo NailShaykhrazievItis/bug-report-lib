@@ -147,12 +147,29 @@
             <TextView
                 android:id="@+id/tv_report_steps_title"
                 style="@style/TextAppearance.MaterialComponents.Subtitle1"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/steps"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/tv_clear_all"
+                app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sp_priority_cont" />
+
+            <TextView
+                android:id="@+id/tv_clear_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@android:color/transparent"
+                android:paddingEnd="4dp"
+                android:text="@string/clear_all"
+                android:textColor="@color/s_primary_text"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1"
+                app:layout_constraintStart_toEndOf="@id/tv_report_steps_title"
                 app:layout_constraintTop_toBottomOf="@id/sp_priority_cont" />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -168,27 +185,27 @@
                 tools:itemCount="2"
                 tools:listitem="@layout/item_step" />
 
-            <androidx.core.widget.ContentLoadingProgressBar
-                android:id="@+id/pb_steps"
-                style="@style/Widget.AppCompat.ProgressBar"
+            <Button
+                android:id="@+id/tv_report_add_step"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@id/rv_steps"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                android:text="@string/add_step"
+                android:textColor="@color/s_primary_text"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/rv_steps"
-                app:layout_constraintVertical_bias="0.2" />
+                app:layout_constraintTop_toBottomOf="@id/rv_steps" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/ti_report_result"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rv_steps">
+                app:layout_constraintTop_toBottomOf="@id/tv_report_add_step">
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/et_report_result"
@@ -227,4 +244,12 @@
                 app:layout_constraintTop_toBottomOf="@id/ti_report_result_actual" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <androidx.core.widget.ContentLoadingProgressBar
+        android:id="@+id/pb_steps"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

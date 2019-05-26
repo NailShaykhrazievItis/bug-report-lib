@@ -11,5 +11,7 @@ interface BugReportView : BaseView {
 
     fun showSuccessCreateMessage(title: String)
 
+    fun showChangeStepDialog(step: String)
+
     fun navigateToSettings()
 }

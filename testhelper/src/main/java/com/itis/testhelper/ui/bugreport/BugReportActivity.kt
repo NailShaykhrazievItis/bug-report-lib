@@ -3,9 +3,11 @@ package com.itis.testhelper.ui.bugreport
 import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.itis.testhelper.R
@@ -15,6 +17,7 @@ import com.itis.testhelper.model.Step
 import com.itis.testhelper.repository.RepositoryProvider
 import com.itis.testhelper.ui.settings.SettingsActivity
 import kotlinx.android.synthetic.main.activity_bug_report.*
+import kotlinx.android.synthetic.main.dialog_edit_step.view.*
 
 class BugReportActivity : AppCompatActivity(), BugReportView {
 
@@ -60,7 +63,11 @@ class BugReportActivity : AppCompatActivity(), BugReportView {
     }
 
     override fun initSteps(steps: List<Step>) {
-        stepsAdapter = StepsAdapter(ArrayList(steps)) { presenter.stepRemoved(it) }
+        stepsAdapter = StepsAdapter(ArrayList(steps), removeStepLambda = {
+            presenter.stepRemoved(it)
+        }, itemClickLambda = {
+            presenter.onItemClick(it)
+        })
         rv_steps.adapter = stepsAdapter
     }
 
@@ -76,9 +83,27 @@ class BugReportActivity : AppCompatActivity(), BugReportView {
 
     }
 
+    override fun showChangeStepDialog(step: String) {
+        AlertDialog.Builder(this).apply {
+            val dialogView = LayoutInflater.from(this@BugReportActivity).inflate(R.layout.dialog_edit_step, null)
+            dialogView.et_step.setText(step)
+            setTitle(getString(R.string.change_step))
+            setView(dialogView)
+            setPositiveButton("OK") { _, _ ->
+                //                presenter.saveRepoName(dialogView.et_repo.text.toString())
+            }
+            setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            show()
+        }
+    }
+
     private fun initListeners() {
         iv_report_back.setOnClickListener { onBackPressed() }
         iv_settings.setOnClickListener { presenter.onSettingClick() }
+        tv_clear_all.setOnClickListener { presenter.onClearAllClick() }
+        tv_report_add_step.setOnClickListener { presenter.onAddStepClick() }
         btn_report_send.setOnClickListener { presenter.onSendClick(et_report_name.text.toString()) }
     }
 

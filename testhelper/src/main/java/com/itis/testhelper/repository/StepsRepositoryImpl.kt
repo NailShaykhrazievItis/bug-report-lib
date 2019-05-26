@@ -10,6 +10,10 @@ class StepsRepositoryImpl(private val sharedPreferences: SharedPreferences) : St
 
     override fun addStep(step: Step) {
         val steps = getSteps() + step
+        addSteps(steps)
+    }
+
+    override fun addSteps(steps: List<Step>) {
         val stepsJson = Gson().toJson(steps)
         sharedPreferences.edit().putString(KEY_STEPS, stepsJson).apply()
     }

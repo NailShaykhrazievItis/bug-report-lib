@@ -11,6 +11,8 @@
     <string name="priority">Priority</string>
     <string name="high">High</string>
     <string name="steps">Steps</string>
+    <string name="change_step">Change step</string>
+    <string name="step">Step</string>D
 
     <string name="login">Login</string>
     <string name="password">Password</string>
@@ -25,5 +27,7 @@
     <string name="choose_repository">Choose repository</string>
     <string name="select_repository">Please, select your work repository</string>
     <string name="provide_repo_name">Provide repository name</string>
+    <string name="clear_all">Clear all</string>
+    <string name="add_step">Add step</string>
 
 </resources>

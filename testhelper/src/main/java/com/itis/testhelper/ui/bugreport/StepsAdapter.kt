@@ -11,14 +11,15 @@ import kotlinx.android.synthetic.main.item_step.*
 
 class StepsAdapter(
         private var steps: ArrayList<Step>,
-        private val removeStepLambda: (Int) -> Unit
+        private val removeStepLambda: (Int) -> Unit,
+        private val itemClickLambda: (Step) -> Unit
 ) : RecyclerView.Adapter<StepsAdapter.StepsHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StepsHolder =
             StepsHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_step, parent, false))
 
     override fun onBindViewHolder(holder: StepsHolder, position: Int) {
-        holder.bind(steps[position], removeStepLambda)
+        holder.bind(steps[position], removeStepLambda, itemClickLambda)
     }
 
     override fun getItemCount(): Int = steps.size
@@ -31,10 +32,11 @@ class StepsAdapter(
 
     class StepsHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-        fun bind(step: Step, removeStepLambda: (Int) -> Unit) {
+        fun bind(step: Step, removeStepLambda: (Int) -> Unit, itemClickLambda: (Step) -> Unit) {
             tv_step.text = step.name
-            tv_position.text = (adapterPosition + 1).toString()
+            tv_position.text = (adapterPosition + 1).toString().plus(")")
             iv_close.setOnClickListener { removeStepLambda(adapterPosition) }
+            containerView.setOnClickListener { itemClickLambda(step) }
         }
     }
 }
