@@ -16,6 +16,7 @@ import com.itis.testhelper.model.Severity
 import com.itis.testhelper.model.Step
 import com.itis.testhelper.repository.RepositoryProvider
 import com.itis.testhelper.ui.settings.SettingsActivity
+import com.itis.testhelper.utils.extensions.hideKeyboard
 import kotlinx.android.synthetic.main.activity_bug_report.*
 import kotlinx.android.synthetic.main.dialog_edit_step.view.*
 
@@ -65,14 +66,22 @@ class BugReportActivity : AppCompatActivity(), BugReportView {
     override fun initSteps(steps: List<Step>) {
         stepsAdapter = StepsAdapter(ArrayList(steps), removeStepLambda = {
             presenter.stepRemoved(it)
-        }, itemClickLambda = {
-            presenter.onItemClick(it)
+        }, itemClickLambda = { position, it ->
+            presenter.onItemClick(position, it)
         })
         rv_steps.adapter = stepsAdapter
     }
 
     override fun itemRemoved(position: Int) {
         stepsAdapter?.removeItem(position)
+    }
+
+    override fun itemAdded(step: Step) {
+        stepsAdapter?.addItem(step)
+    }
+
+    override fun itemChanged(position: Int, step: Step) {
+        stepsAdapter?.changeItem(position, step)
     }
 
     override fun navigateToSettings() {
@@ -89,11 +98,30 @@ class BugReportActivity : AppCompatActivity(), BugReportView {
             dialogView.et_step.setText(step)
             setTitle(getString(R.string.change_step))
             setView(dialogView)
-            setPositiveButton("OK") { _, _ ->
-                //                presenter.saveRepoName(dialogView.et_repo.text.toString())
+            setPositiveButton(getString(R.string.ok)) { _, _ ->
+                presenter.changeStep(dialogView.et_step.text.trimStart().trimEnd().toString())
+                dialogView.et_step.hideKeyboard()
             }
-            setNegativeButton("Cancel") { dialog, _ ->
+            setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                 dialog.dismiss()
+                dialogView.et_step.hideKeyboard()
+            }
+            show()
+        }
+    }
+
+    override fun showAddStepDialog() {
+        AlertDialog.Builder(this).apply {
+            val dialogView = LayoutInflater.from(this@BugReportActivity).inflate(R.layout.dialog_edit_step, null)
+            setTitle(getString(R.string.add_step))
+            setView(dialogView)
+            setPositiveButton(getString(R.string.ok)) { _, _ ->
+                presenter.addStep(dialogView.et_step.text.trimStart().trimEnd().toString())
+                dialogView.et_step.hideKeyboard()
+            }
+            setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+                dialog.dismiss()
+                dialogView.et_step.hideKeyboard()
             }
             show()
         }

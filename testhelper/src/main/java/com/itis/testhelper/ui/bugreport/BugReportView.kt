@@ -9,9 +9,15 @@ interface BugReportView : BaseView {
 
     fun itemRemoved(position: Int)
 
+    fun itemAdded(step: Step)
+
+    fun itemChanged(position: Int, step: Step)
+
     fun showSuccessCreateMessage(title: String)
 
     fun showChangeStepDialog(step: String)
+
+    fun showAddStepDialog()
 
     fun navigateToSettings()
 }

@@ -1,8 +1,10 @@
 package com.itis.testhelper.utils.extensions
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.Rect
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.appcompat.view.menu.MenuView
 import com.itis.testhelper.utils.STRING_EMPTY
@@ -21,3 +23,6 @@ fun View.getRectByView(): Rect {
             location[0] + this.width,
             location[1] + this.height)
 }
+
+fun View.hideKeyboard() = (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+        .hideSoftInputFromWindow(windowToken, 0)

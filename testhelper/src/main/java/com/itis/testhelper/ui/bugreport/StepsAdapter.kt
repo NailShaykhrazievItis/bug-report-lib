@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.item_step.*
 class StepsAdapter(
         private var steps: ArrayList<Step>,
         private val removeStepLambda: (Int) -> Unit,
-        private val itemClickLambda: (Step) -> Unit
+        private val itemClickLambda: (Int, Step) -> Unit
 ) : RecyclerView.Adapter<StepsAdapter.StepsHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StepsHolder =
@@ -30,13 +30,23 @@ class StepsAdapter(
         notifyItemRangeChanged(position, steps.size)
     }
 
+    fun addItem(step: Step) {
+        steps.add(step)
+        notifyItemInserted(steps.size)
+    }
+
+    fun changeItem(position: Int, step: Step) {
+        steps[position] = step
+        notifyItemChanged(position)
+    }
+
     class StepsHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-        fun bind(step: Step, removeStepLambda: (Int) -> Unit, itemClickLambda: (Step) -> Unit) {
+        fun bind(step: Step, removeStepLambda: (Int) -> Unit, itemClickLambda: (Int, Step) -> Unit) {
             tv_step.text = step.name
             tv_position.text = (adapterPosition + 1).toString().plus(")")
             iv_close.setOnClickListener { removeStepLambda(adapterPosition) }
-            containerView.setOnClickListener { itemClickLambda(step) }
+            containerView.setOnClickListener { itemClickLambda(adapterPosition, step) }
         }
     }
 }

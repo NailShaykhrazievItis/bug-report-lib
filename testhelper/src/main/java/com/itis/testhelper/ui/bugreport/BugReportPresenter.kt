@@ -19,15 +19,13 @@ class BugReportPresenter(
 ) : BasePresenter(reportView) {
 
     private var steps = ArrayList<Step>()
+    private var changePosition = -1
 
     init {
         fetchSteps()
     }
 
     fun onSendClick(title: String) {
-//        launch(Dispatchers.IO) {
-//            stepsRepository.clearSteps()
-//        }
         if (userRepository.getAuthToken().isNotEmpty()) {
             launch {
                 invokeSuspend {
@@ -46,10 +44,16 @@ class BugReportPresenter(
 
     fun onSettingClick() = reportView.navigateToSettings()
 
-    fun onItemClick(step: Step) {
+    fun onItemClick(position: Int, step: Step) {
         reportView.showChangeStepDialog(step.name)
-        steps.find {
-            it == step
+        changePosition = position
+    }
+
+    fun changeStep(name: String) {
+        if (changePosition > -1) {
+            steps[changePosition].name = name
+            reportView.itemChanged(changePosition, steps[changePosition])
+            saveSteps()
         }
     }
 
@@ -64,7 +68,21 @@ class BugReportPresenter(
         fetchSteps()
     }
 
-    fun onAddStepClick() {}
+    fun onAddStepClick() = reportView.showAddStepDialog()
+
+    fun addStep(name: String) {
+        Step(name).also {
+            reportView.itemAdded(it)
+            steps.add(it)
+            saveSteps()
+        }
+    }
+
+    private fun saveSteps() {
+        launch(Dispatchers.IO) {
+            stepsRepository.addSteps(steps)
+        }
+    }
 
     private fun fetchSteps() {
         launch {

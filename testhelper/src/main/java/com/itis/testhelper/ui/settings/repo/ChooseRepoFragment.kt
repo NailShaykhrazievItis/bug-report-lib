@@ -13,6 +13,7 @@ import com.itis.testhelper.R
 import com.itis.testhelper.model.Repository
 import com.itis.testhelper.repository.RepositoryProvider
 import com.itis.testhelper.utils.STRING_EMPTY
+import com.itis.testhelper.utils.extensions.hideKeyboard
 import kotlinx.android.synthetic.main.dialog_enter_repo.view.*
 import kotlinx.android.synthetic.main.fragment_choose_repo.*
 
@@ -61,11 +62,13 @@ class ChooseRepoFragment : Fragment(), ChooseRepoView {
                 val dialogView = LayoutInflater.from(it).inflate(R.layout.dialog_enter_repo, null)
                 setTitle(getString(R.string.provide_repo_name))
                 setView(dialogView)
-                setPositiveButton("OK") { _, _ ->
+                setPositiveButton(getString(R.string.ok)) { _, _ ->
                     presenter.saveRepoName(dialogView.et_repo.text.toString())
+                    dialogView.et_repo.hideKeyboard()
                 }
-                setNegativeButton("Cancel") { dialog, _ ->
+                setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                     dialog.dismiss()
+                    dialogView.et_repo.hideKeyboard()
                 }
                 show()
             }
