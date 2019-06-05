@@ -74,7 +74,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
-                <!--app:layout_constraintTop_toBottomOf="@id/tv_report_title">-->
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/et_report_name"
@@ -85,7 +84,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/ti_report_desc"
+                android:id="@+id/ti_report_summary"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -95,10 +94,28 @@
                 app:layout_constraintTop_toBottomOf="@id/ti_report_name">
 
                 <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/et_report_desc"
+                    android:id="@+id/et_report_summary"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/description"
+                    android:hint="@string/summary"
+                    android:textSize="16sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/ti_report_precondition"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ti_report_summary">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/et_report_precondition"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/precondition"
                     android:textSize="16sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -110,7 +127,7 @@
                 android:background="@drawable/bkg_corner"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ti_report_desc">
+                app:layout_constraintTop_toBottomOf="@id/ti_report_precondition">
 
                 <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/sp_severity"
@@ -144,6 +161,27 @@
                     tools:listheader="Severity" />
             </FrameLayout>
 
+            <FrameLayout
+                android:id="@+id/sp_frequency_cont"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bkg_corner"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sp_priority_cont">
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/sp_frequency"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="4dp"
+                    android:paddingTop="16dp"
+                    android:paddingEnd="4dp"
+                    android:paddingBottom="16dp"
+                    tools:listheader="Frequency" />
+            </FrameLayout>
+
             <TextView
                 android:id="@+id/tv_report_steps_title"
                 style="@style/TextAppearance.MaterialComponents.Subtitle1"
@@ -155,22 +193,22 @@
                 app:layout_constraintEnd_toEndOf="@id/tv_clear_all"
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/sp_priority_cont" />
+                app:layout_constraintTop_toBottomOf="@id/sp_frequency_cont" />
 
             <TextView
                 android:id="@+id/tv_clear_all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="12dp"
                 android:background="@android:color/transparent"
-                android:paddingEnd="4dp"
+                android:padding="4dp"
                 android:text="@string/clear_all"
                 android:textColor="@color/s_primary_text"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1"
                 app:layout_constraintStart_toEndOf="@id/tv_report_steps_title"
-                app:layout_constraintTop_toBottomOf="@id/sp_priority_cont" />
+                app:layout_constraintTop_toBottomOf="@id/sp_frequency_cont" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_steps"

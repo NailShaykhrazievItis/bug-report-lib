@@ -3,7 +3,8 @@
     <string name="empty" />
 
     <string name="name">Name</string>
-    <string name="description">Description</string>
+    <string name="summary">Summary</string>
+    <string name="precondition">Precondition</string>
     <string name="actual_result">Actual Result</string>
     <string name="expected_result">Expected Result</string>
     <string name="bug_report">Bug Report</string>
@@ -15,8 +16,10 @@
     <string name="step">Step</string>
     <string name="clear_all">Clear all</string>
     <string name="add_step">Add step</string>
+
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="field_can_not_empty">Field can not be empty</string>
 
     <string name="login">Login</string>
     <string name="password">Password</string>

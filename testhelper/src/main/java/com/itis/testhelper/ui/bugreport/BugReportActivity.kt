@@ -6,17 +6,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.google.android.material.textfield.TextInputLayout
 import com.itis.testhelper.R
+import com.itis.testhelper.model.Frequency
 import com.itis.testhelper.model.Priority
 import com.itis.testhelper.model.Severity
 import com.itis.testhelper.model.Step
 import com.itis.testhelper.repository.RepositoryProvider
 import com.itis.testhelper.ui.settings.SettingsActivity
+import com.itis.testhelper.utils.extensions.afterTextChanged
 import com.itis.testhelper.utils.extensions.hideKeyboard
+import com.itis.testhelper.utils.extensions.isValidateEmpty
 import kotlinx.android.synthetic.main.activity_bug_report.*
 import kotlinx.android.synthetic.main.dialog_edit_step.view.*
 
@@ -26,6 +31,7 @@ class BugReportActivity : AppCompatActivity(), BugReportView {
 
     private lateinit var adapterSeverity: ArrayAdapter<Severity>
     private lateinit var adapterPriority: ArrayAdapter<Priority>
+    private lateinit var adapterFrequency: ArrayAdapter<Frequency>
     private var stepsAdapter: StepsAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,6 +45,7 @@ class BugReportActivity : AppCompatActivity(), BugReportView {
         initListeners()
         initPriorityAdapter()
         initSeverityAdapter()
+        initFrequencyAdapter()
     }
 
     override fun onDestroy() {
@@ -132,11 +139,38 @@ class BugReportActivity : AppCompatActivity(), BugReportView {
         iv_settings.setOnClickListener { presenter.onSettingClick() }
         tv_clear_all.setOnClickListener { presenter.onClearAllClick() }
         tv_report_add_step.setOnClickListener { presenter.onAddStepClick() }
-        btn_report_send.setOnClickListener { presenter.onSendClick(et_report_name.text.toString()) }
+        btn_report_send.setOnClickListener {
+            if (et_report_name.isValidateEmpty { setFieldEmptyError(ti_report_name) } &&
+                    et_report_summary.isValidateEmpty { setFieldEmptyError(ti_report_summary) }) {
+                presenter.onSendClick(
+                        title = et_report_name.text.toString(),
+                        summary = et_report_summary.text.toString(),
+                        precondition = et_report_precondition.text.toString(),
+                        severity = sp_severity.selectedItem as Severity,
+                        priority = sp_priority.selectedItem as Priority,
+                        frequency = sp_frequency.selectedItem as Frequency
+                )
+            }
+        }
+        initErrorClearListener(et_report_name, ti_report_name)
+        initErrorClearListener(et_report_summary, ti_report_summary)
+    }
+
+    private fun initErrorClearListener(editText: EditText?, textInputLayout: TextInputLayout?) {
+        editText?.afterTextChanged {
+            textInputLayout?.apply {
+                error = null
+                isErrorEnabled = false
+            }
+        }
+    }
+
+    private fun setFieldEmptyError(view: TextInputLayout) {
+        view.error = getString(R.string.field_can_not_empty)
     }
 
     private fun initSeverityAdapter() {
-        val severity = arrayOf(Severity.BLOCKER, Severity.CRITICAL, Severity.MAJOR, Severity.MINOR, Severity.TRIVIAL)
+        val severity = Severity.values()
         adapterSeverity = ArrayAdapter(this, android.R.layout.simple_spinner_item, severity)
         adapterSeverity.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         sp_severity.background.setColorFilter(ContextCompat.getColor(this, R.color.icon), PorterDuff.Mode.SRC_ATOP)
@@ -144,10 +178,18 @@ class BugReportActivity : AppCompatActivity(), BugReportView {
     }
 
     private fun initPriorityAdapter() {
-        val priority = arrayOf(Priority.HIGH, Priority.MEDIUM, Priority.LOW)
+        val priority = Priority.values()
         adapterPriority = ArrayAdapter(this, android.R.layout.simple_spinner_item, priority)
         adapterPriority.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         sp_priority.background.setColorFilter(ContextCompat.getColor(this, R.color.icon), PorterDuff.Mode.SRC_ATOP)
         sp_priority.adapter = adapterPriority
+    }
+
+    private fun initFrequencyAdapter() {
+        val frequency = Frequency.values()
+        adapterFrequency = ArrayAdapter(this, android.R.layout.simple_spinner_item, frequency)
+        adapterFrequency.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        sp_frequency.background.setColorFilter(ContextCompat.getColor(this, R.color.icon), PorterDuff.Mode.SRC_ATOP)
+        sp_frequency.adapter = adapterFrequency
     }
 }

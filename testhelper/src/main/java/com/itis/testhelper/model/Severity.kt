@@ -1,5 +1,5 @@
 package com.itis.testhelper.model
 
 enum class Severity {
-    BLOCKER, CRITICAL, MAJOR, MINOR, TRIVIAL
+    Crasher, Blocker, Critical, Major, Minor, Trivial, Enhancement
 }

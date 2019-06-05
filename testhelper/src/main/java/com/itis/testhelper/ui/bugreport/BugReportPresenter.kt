@@ -1,5 +1,8 @@
 package com.itis.testhelper.ui.bugreport
 
+import com.itis.testhelper.model.Frequency
+import com.itis.testhelper.model.Priority
+import com.itis.testhelper.model.Severity
 import com.itis.testhelper.model.Step
 import com.itis.testhelper.repository.IssueRepository
 import com.itis.testhelper.repository.StepsRepository
@@ -25,7 +28,8 @@ class BugReportPresenter(
         fetchSteps()
     }
 
-    fun onSendClick(title: String) {
+    fun onSendClick(title: String, summary: String, precondition: String,
+                    severity: Severity, priority: Priority, frequency: Frequency) {
         if (userRepository.getAuthToken().isNotEmpty()) {
             launch {
                 invokeSuspend {
@@ -96,7 +100,12 @@ class BugReportPresenter(
         }
     }
 
-    private fun getIssueBody(): String {
+    private fun getIssueBody(
+//            name: String,
+//            desc: String,
+//            severity: Severity,
+//            priority: Priority
+    ): String {
         return STRING_EMPTY
     }
 }
