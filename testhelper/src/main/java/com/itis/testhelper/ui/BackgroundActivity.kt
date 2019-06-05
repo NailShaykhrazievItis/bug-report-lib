@@ -121,7 +121,7 @@ open class BackgroundActivity : AppCompatActivity(), SensorEventListener,
             if (currentTime - lastShakeTime > MIN_TIME_BETWEEN_SHAKES) {
                 val x = event.values[0]
                 val acceleration = Math.abs(x)
-                Log.d("Acceleration", "$acceleration m/s^2")
+//                Log.d("Acceleration", "$acceleration m/s^2")
                 if (acceleration > SHAKE_THRESHOLD) {
                     lastShakeTime = currentTime
                     fabButton?.also {

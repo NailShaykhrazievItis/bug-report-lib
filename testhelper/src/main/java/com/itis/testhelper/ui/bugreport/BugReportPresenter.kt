@@ -1,18 +1,18 @@
 package com.itis.testhelper.ui.bugreport
 
-import com.itis.testhelper.model.Frequency
-import com.itis.testhelper.model.Priority
-import com.itis.testhelper.model.Severity
-import com.itis.testhelper.model.Step
+import com.itis.testhelper.model.*
 import com.itis.testhelper.repository.IssueRepository
 import com.itis.testhelper.repository.StepsRepository
 import com.itis.testhelper.repository.UserRepository
 import com.itis.testhelper.ui.base.BasePresenter
 import com.itis.testhelper.utils.STRING_EMPTY
+import com.itis.testhelper.utils.STRING_USER_NOT_FOUND
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.*
+import kotlin.collections.ArrayList
 
 class BugReportPresenter(
         private var reportView: BugReportView,
@@ -29,14 +29,22 @@ class BugReportPresenter(
     }
 
     fun onSendClick(title: String, summary: String, precondition: String,
-                    severity: Severity, priority: Priority, frequency: Frequency) {
+                    severity: Severity, priority: Priority, frequency: Frequency,
+                    environment: Environment, actual: String, expected: String) {
         if (userRepository.getAuthToken().isNotEmpty()) {
-            launch {
+            launch(handler) {
                 invokeSuspend {
                     val issue = async(Dispatchers.IO) {
-                        val user = userRepository.getUserName()
+                        val user = userRepository.getUser()
                         val repo = userRepository.getCurrentRepoName()
-                        issueRepository.createIssue(user, repo, title, getIssueBody())
+                        val login = user?.login ?: STRING_EMPTY
+                        val userName = user?.run {
+                            name += if (email.isNullOrEmpty()) STRING_EMPTY else "($email)"
+                            name
+                        } ?: STRING_USER_NOT_FOUND
+                        val body = getIssueBody(title, summary, userName, precondition,
+                                environment, severity, priority, frequency, actual, expected)
+                        issueRepository.createIssue(login, repo, title, body)
                     }
                     reportView.showSuccessCreateMessage(issue.await().title)
                 }
@@ -101,11 +109,10 @@ class BugReportPresenter(
     }
 
     private fun getIssueBody(
-//            name: String,
-//            desc: String,
-//            severity: Severity,
-//            priority: Priority
-    ): String {
-        return STRING_EMPTY
-    }
+            title: String, summary: String, reporter: String, precondition: String,
+            environment: Environment, severity: Severity, priority: Priority, frequency: Frequency,
+            actual: String, expected: String
+    ): String = BugReport(title, summary, reporter, Date().toString(), precondition,
+            environment, severity, priority, frequency,
+            steps, actual, expected).toMarkdown()
 }

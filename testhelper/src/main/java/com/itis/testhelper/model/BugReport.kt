@@ -6,7 +6,7 @@ data class BugReport(
         var reporter: String,
         var submitDate: String,
         var precondition: String,
-        var version: String,
+        var environment: Environment,
         var severity: Severity,
         var priority: Priority,
         var frequency: Frequency,
@@ -14,36 +14,41 @@ data class BugReport(
         var result: String,
         var expectedResult: String
 ) {
-    fun toMarkdown(): String {
-        StringBuilder().apply {
-            append("|Name|$name|${initTableLine("Name", name)}")
-            append("|Summary|$summary|${initTableLine("Summary", summary)}")
-            append("|Reporter|$reporter|${initTableLine("Reporter", reporter)}")
-            append("|Submit Date|$submitDate|${initTableLine("Submit Date", submitDate)}")
-            append("|Precondition|$precondition|${initTableLine("Precondition", precondition)}")
-            append("|Version|$version|${initTableLine("Version", version)}")
-            append("|Severity|${severity.name}|${initTableLine("Severity", severity.name)}")
-            append("|Priority|${priority.name}|${initTableLine("Priority", priority.name)}")
-            append("|Frequency|${frequency.name}|${initTableLine("Frequency", frequency.name)}")
-        }
-        return ""
-    }
+    fun toMarkdown(): String = StringBuilder().apply {
+        append("|Label|Value|\n")
+        append("|-------|-------|\n")
+        appendRow("Name", name)
+        appendRow("Summary", summary)
+        appendRowIfNotEmpty("Precondition", precondition)
+        appendRow("Version", String.format("%s.%s-%s", environment.versionName, environment.versionCode, environment.processor))
+        appendRow("Device", environment.device)
+        appendRow("API Level", environment.os)
+        appendRow("Severity", severity.name)
+        appendRow("Priority", priority.name)
+        appendRow("Frequency", frequency.name)
+        appendRowIfNotEmpty("Reporter", reporter)
+        appendRow("Submit Date", submitDate)
+        appendHeader("Steps to reproduce", initSteps())
+        appendHeader("Actual results", result)
+        appendHeader("Expected result", expectedResult)
+    }.toString()
 
-    private fun initTableLine(title: String, text: String): String =
-            StringBuilder("\n|-").apply {
-                append(getHyphenByText(title))
-                append("-|-")
-                append(getHyphenByText(text))
-                append("-|\n")
-            }.toString()
-
-    private fun getHyphenByText(title: String): String {
-        var result1 = ""
-        repeat(title.length) {
-            result1 += "-"
+    private fun initSteps() = StringBuilder("").apply {
+        steps.forEach {
+            append("1. ${it.name}\n")
         }
-        return result1
-    }
+    }.toString()
+
+    private fun StringBuilder.appendRowIfNotEmpty(title: String, text: String): StringBuilder =
+            if (text.isNotEmpty()) {
+                this.append("|$title|${text.capitalize()}|\n")
+            } else this
+
+    private fun StringBuilder.appendRow(title: String, text: String): StringBuilder =
+            this.append("|$title|${text.capitalize()}|\n")
+
+    private fun StringBuilder.appendHeader(title: String, text: String): StringBuilder =
+            this.append("### $title\n${text.capitalize()}\n")
 
     companion object {
         private const val TITLE_NAME = "Name"

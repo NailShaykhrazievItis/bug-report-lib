@@ -10,5 +10,5 @@ data class User(var login: String,
                 var avatarUrl: String,
                 @SerializedName("html_url")
                 var htmlUrl: String,
-                var email: String = STRING_EMPTY
+                var email: String? = STRING_EMPTY
 )

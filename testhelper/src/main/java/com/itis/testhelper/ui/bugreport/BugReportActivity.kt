@@ -2,6 +2,7 @@ package com.itis.testhelper.ui.bugreport
 
 import android.content.Intent
 import android.graphics.PorterDuff
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,10 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.material.textfield.TextInputLayout
 import com.itis.testhelper.R
-import com.itis.testhelper.model.Frequency
-import com.itis.testhelper.model.Priority
-import com.itis.testhelper.model.Severity
-import com.itis.testhelper.model.Step
+import com.itis.testhelper.model.*
 import com.itis.testhelper.repository.RepositoryProvider
 import com.itis.testhelper.ui.settings.SettingsActivity
 import com.itis.testhelper.utils.extensions.afterTextChanged
@@ -96,7 +94,7 @@ class BugReportActivity : AppCompatActivity(), BugReportView {
     }
 
     override fun showSuccessCreateMessage(title: String) {
-
+        Toast.makeText(this, title, Toast.LENGTH_LONG).show()
     }
 
     override fun showChangeStepDialog(step: String) {
@@ -134,6 +132,23 @@ class BugReportActivity : AppCompatActivity(), BugReportView {
         }
     }
 
+    private fun initEnvironment(): Environment {
+        var versionName = "1.0.0"
+        var versionCode = 1
+        var processor = ""
+        packageManager?.getPackageInfo(packageName, 0)?.also {
+            versionCode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                it.longVersionCode.toInt()
+            } else {
+                it.versionCode
+            }
+            versionName = it.versionName
+            processor = Build.CPU_ABI
+        }
+        return Environment(versionName, versionCode.toString(), processor,
+                "${Build.MANUFACTURER} ${Build.MODEL}", Build.VERSION.SDK_INT.toString())
+    }
+
     private fun initListeners() {
         iv_report_back.setOnClickListener { onBackPressed() }
         iv_settings.setOnClickListener { presenter.onSettingClick() }
@@ -148,7 +163,10 @@ class BugReportActivity : AppCompatActivity(), BugReportView {
                         precondition = et_report_precondition.text.toString(),
                         severity = sp_severity.selectedItem as Severity,
                         priority = sp_priority.selectedItem as Priority,
-                        frequency = sp_frequency.selectedItem as Frequency
+                        frequency = sp_frequency.selectedItem as Frequency,
+                        environment = initEnvironment(),
+                        actual = et_report_result_actual.text.toString(),
+                        expected = et_report_result_expected.text.toString()
                 )
             }
         }

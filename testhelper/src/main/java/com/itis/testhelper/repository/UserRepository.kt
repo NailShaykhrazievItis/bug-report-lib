@@ -20,10 +20,6 @@ interface UserRepository {
 
     fun removeToken(): Boolean
 
-    fun saveUserName(name: String)
-
-    fun getUserName(): String
-
     fun saveUser(user: User)
 
     fun removeUser()

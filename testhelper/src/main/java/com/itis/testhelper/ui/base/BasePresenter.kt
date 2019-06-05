@@ -1,5 +1,6 @@
 package com.itis.testhelper.ui.base
 
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancelChildren
@@ -7,6 +8,10 @@ import kotlinx.coroutines.cancelChildren
 open class BasePresenter(
         private var view: BaseView?
 ) : CoroutineScope by MainScope() {
+
+    protected val handler = CoroutineExceptionHandler { _, exception ->
+        view?.showError(exception)
+    }
 
     fun onDestroy() {
         coroutineContext.cancelChildren()

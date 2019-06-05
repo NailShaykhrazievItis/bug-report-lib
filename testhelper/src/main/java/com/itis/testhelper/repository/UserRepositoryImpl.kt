@@ -3,13 +3,11 @@ package com.itis.testhelper.repository
 import android.content.SharedPreferences
 import android.util.Base64
 import com.google.gson.Gson
-import com.google.gson.JsonObject
 import com.itis.testhelper.api.ApiFactory
 import com.itis.testhelper.model.Repository
 import com.itis.testhelper.model.User
+import com.itis.testhelper.model.request.AuthBody
 import com.itis.testhelper.model.response.Authorization
-import com.itis.testhelper.utils.CLIENT_ID
-import com.itis.testhelper.utils.CLIENT_SECRET
 import com.itis.testhelper.utils.STRING_EMPTY
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -19,7 +17,7 @@ class UserRepositoryImpl(private val sharedPreferences: SharedPreferences) : Use
     override suspend fun getAuthAsync(login: String, password: String): Authorization =
             withContext(Dispatchers.IO) {
                 val authorizationString = createAuthorizationString(login, password)
-                ApiFactory.githubService.authorizeAsync(authorizationString, createAuthorizationParam()).await()
+                ApiFactory.githubService.authorizeAsync(authorizationString, AuthBody()).await()
             }
 
     override suspend fun getUserByTokenAsync(): User = withContext(Dispatchers.IO) {
@@ -50,11 +48,6 @@ class UserRepositoryImpl(private val sharedPreferences: SharedPreferences) : Use
 
     override fun removeToken() = saveAuthToken(STRING_EMPTY)
 
-    override fun saveUserName(name: String) = sharedPreferences.edit().putString(KEY_USER_NAME, name).apply()
-
-    override fun getUserName(): String = sharedPreferences.getString(KEY_USER_NAME, STRING_EMPTY)
-            ?: STRING_EMPTY
-
     override fun saveUser(user: User) {
         val json = Gson().toJson(user)
         sharedPreferences.edit().putString(KEY_USER, json).apply()
@@ -75,13 +68,6 @@ class UserRepositoryImpl(private val sharedPreferences: SharedPreferences) : Use
         return authorizationString.trim()
     }
 
-    private fun createAuthorizationParam(): JsonObject {
-        val param = JsonObject()
-        param.addProperty(CLIENT_ID_PROPERTY, CLIENT_ID)
-        param.addProperty(CLIENT_SECRET_PROPERTY, CLIENT_SECRET)
-        return param
-    }
-
     companion object {
         private const val BASIC_AUTHORIZATION = "Basic "
         private const val CLIENT_ID_PROPERTY = "client_id"
@@ -90,6 +76,5 @@ class UserRepositoryImpl(private val sharedPreferences: SharedPreferences) : Use
         private const val KEY_TOKEN = "key_report_user_token"
         private const val KEY_REPO = "key_report_repo"
         private const val KEY_USER = "key_report_user"
-        private const val KEY_USER_NAME = "key_report_user_name"
     }
 }

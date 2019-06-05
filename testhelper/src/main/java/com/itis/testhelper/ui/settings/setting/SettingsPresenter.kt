@@ -56,6 +56,8 @@ class SettingsPresenter(
                 removeToken()
                 removeRepoName()
             }
+        }.invokeOnCompletion {
+            updateUserState()
         }
     }
 
