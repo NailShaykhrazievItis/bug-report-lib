@@ -1,6 +1,6 @@
 package com.itis.testhelper.ui.bugreport
 
-import com.itis.testhelper.model.*
+import com.itis.testhelper.model.bug.*
 import com.itis.testhelper.repository.IssueRepository
 import com.itis.testhelper.repository.StepsRepository
 import com.itis.testhelper.repository.UserRepository

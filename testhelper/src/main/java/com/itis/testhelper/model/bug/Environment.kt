@@ -1,4 +1,4 @@
-package com.itis.testhelper.model
+package com.itis.testhelper.model.bug
 
 data class Environment(
         var versionName: String,

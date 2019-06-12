@@ -6,7 +6,7 @@ import com.itis.testhelper.model.response.Authorization
 
 interface UserRepository {
 
-    suspend fun getAuthAsync(login: String, password: String): Authorization
+    suspend fun getAuthAsync(login: String, password: String, note: String): Authorization
 
     suspend fun getUserByTokenAsync(): User
 

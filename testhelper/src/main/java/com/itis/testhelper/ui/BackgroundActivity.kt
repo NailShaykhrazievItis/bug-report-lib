@@ -26,7 +26,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.internal.BaselineLayout
 import com.itis.testhelper.R
-import com.itis.testhelper.model.Step
+import com.itis.testhelper.model.bug.Step
 import com.itis.testhelper.repository.RepositoryProvider
 import com.itis.testhelper.repository.StepsRepository
 import com.itis.testhelper.ui.bugreport.BugReportActivity

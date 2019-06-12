@@ -1,6 +1,6 @@
 package com.itis.testhelper.ui.bugreport
 
-import com.itis.testhelper.model.Step
+import com.itis.testhelper.model.bug.Step
 import com.itis.testhelper.ui.base.BaseView
 
 interface BugReportView : BaseView {

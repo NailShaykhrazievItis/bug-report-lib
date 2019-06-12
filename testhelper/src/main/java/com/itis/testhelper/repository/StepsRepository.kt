@@ -1,6 +1,6 @@
 package com.itis.testhelper.repository
 
-import com.itis.testhelper.model.Step
+import com.itis.testhelper.model.bug.Step
 
 interface StepsRepository {
 

@@ -3,7 +3,7 @@ package com.itis.testhelper.repository
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.itis.testhelper.model.Step
+import com.itis.testhelper.model.bug.Step
 import com.itis.testhelper.utils.STRING_EMPTY
 
 class StepsRepositoryImpl(private val sharedPreferences: SharedPreferences) : StepsRepository {

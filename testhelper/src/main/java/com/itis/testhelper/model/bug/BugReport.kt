@@ -1,4 +1,4 @@
-package com.itis.testhelper.model
+package com.itis.testhelper.model.bug
 
 data class BugReport(
         var name: String,
@@ -12,7 +12,8 @@ data class BugReport(
         var frequency: Frequency,
         var steps: List<Step>,
         var result: String,
-        var expectedResult: String
+        var expectedResult: String,
+        var comments: String = ""
 ) {
     fun toMarkdown(): String = StringBuilder().apply {
         append("|Label|Value|\n")

@@ -47,6 +47,24 @@
             android:textSize="16sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/ti_sign_in_note"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ti_sign_in_pass">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_sign_in_note"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/new_note"
+            android:textSize="16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
     <ProgressBar
         android:id="@+id/progress"
         style="@style/Widget.AppCompat.ProgressBar"
@@ -56,7 +74,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ti_sign_in_pass"
+        app:layout_constraintTop_toBottomOf="@id/ti_sign_in_note"
         tools:visibility="visible" />
 
     <androidx.appcompat.widget.AppCompatButton
@@ -70,6 +88,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/progress"
         app:layout_goneMarginTop="56dp" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,13 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.EditText
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import com.itis.testhelper.R
-import com.itis.testhelper.model.*
+import com.itis.testhelper.model.bug.*
 import com.itis.testhelper.repository.RepositoryProvider
 import com.itis.testhelper.ui.settings.SettingsActivity
 import com.itis.testhelper.utils.extensions.afterTextChanged
@@ -65,7 +65,7 @@ class BugReportActivity : AppCompatActivity(), BugReportView {
     }
 
     override fun showError(throwable: Throwable) {
-        Toast.makeText(this, throwable.message, Toast.LENGTH_SHORT).show()
+        Snackbar.make(container_bug_report, throwable.message.toString(), Snackbar.LENGTH_LONG).show()
     }
 
     override fun initSteps(steps: List<Step>) {
@@ -94,7 +94,7 @@ class BugReportActivity : AppCompatActivity(), BugReportView {
     }
 
     override fun showSuccessCreateMessage(title: String) {
-        Toast.makeText(this, title, Toast.LENGTH_LONG).show()
+        Snackbar.make(container_bug_report, getString(R.string.issue_created, title), Snackbar.LENGTH_LONG).show()
     }
 
     override fun showChangeStepDialog(step: String) {

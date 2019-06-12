@@ -14,10 +14,10 @@ import kotlinx.coroutines.withContext
 
 class UserRepositoryImpl(private val sharedPreferences: SharedPreferences) : UserRepository {
 
-    override suspend fun getAuthAsync(login: String, password: String): Authorization =
+    override suspend fun getAuthAsync(login: String, password: String, note: String): Authorization =
             withContext(Dispatchers.IO) {
                 val authorizationString = createAuthorizationString(login, password)
-                ApiFactory.githubService.authorizeAsync(authorizationString, AuthBody()).await()
+                ApiFactory.githubService.authorizeAsync(authorizationString, AuthBody(note)).await()
             }
 
     override suspend fun getUserByTokenAsync(): User = withContext(Dispatchers.IO) {

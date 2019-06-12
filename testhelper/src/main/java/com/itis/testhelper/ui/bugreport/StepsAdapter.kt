@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.itis.testhelper.R
-import com.itis.testhelper.model.Step
+import com.itis.testhelper.model.bug.Step
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_step.*
 
